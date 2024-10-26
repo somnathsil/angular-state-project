@@ -13,5 +13,6 @@ export class DashboardComponent {
 
   ngAfterViewInit() {
     this._common.setLoadingStatus(false);
+    console.log('Hello World');
   }
 }
