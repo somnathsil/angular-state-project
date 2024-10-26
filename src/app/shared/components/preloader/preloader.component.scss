@@ -1,0 +1,85 @@
+.splash-screen {
+  @apply w-screen;
+  @apply h-screen;
+  @apply z-[9999];
+  @apply bg-white;
+  @apply overflow-hidden;
+  @apply fixed;
+  @apply left-0;
+  @apply right-0;
+  @apply top-0;
+  @apply bottom-0;
+}
+.splash-screen-inner {
+  @apply relative;
+  @apply w-full;
+  @apply h-full;
+  @apply flex;
+  @apply flex-col;
+  @apply items-center;
+  @apply justify-center;
+}
+.splash-loader {
+  @apply w-[180px];
+  @apply h-[180px];
+  @apply z-20;
+  @apply flex;
+  @apply relative;
+  @apply rounded-full;
+  @apply items-center;
+  @apply justify-center;
+  @apply bg-primary;
+}
+.splash-loader:after,
+.splash-loader:before {
+  @apply absolute;
+  @apply left-0;
+  @apply right-0;
+  @apply bottom-0;
+  @apply top-0;
+  @apply w-full;
+  @apply h-full;
+  @apply rounded-full;
+  @apply empty-content;
+  @apply bg-primary;
+}
+.splash-logo {
+  @apply w-24;
+  @apply h-24;
+  @apply relative;
+  @apply z-50;
+}
+.splash-logo img {
+  @apply w-full;
+  @apply h-full;
+}
+.splash-loader:before {
+  animation: bounce 1.5s infinite;
+}
+.splash-loader:after {
+  animation: bounce 1.5s -0.4s infinite;
+}
+@keyframes bounce {
+  0% {
+    transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    -webkit-transform: scale(2);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes bounce {
+  0% {
+    transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    -webkit-transform: scale(2);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,59 @@
+@import "partials";
+
+.full-widthheight {
+  @apply w-full;
+  @apply h-full;
+}
+.navbar {
+  @apply pr-5;
+  @apply relative;
+  @apply bg-black;
+  @include width-height("height", 58);
+  @include flex-all(flex, center, space-between);
+}
+.main-header {
+  @apply relative;
+  @include property("z-index", 998);
+  @include spacing("margin-left", 260);
+  @include transition;
+  &:after{
+    @apply empty-content;
+    @apply w-3;
+    @apply h-full;
+    background: linear-gradient(270deg, #000 0%, #1F1F1F 100%);
+    @apply absolute;
+    @apply left-0;
+    @apply top-0;
+  }
+}
+.header-top-end {
+  @apply w-full;
+  @include flex-all(flex, center, flex-end);
+  .toggle-button {
+    @apply absolute;
+    @apply -left-9;
+    @apply top-[22px];
+    @apply cursor-pointer;
+    svg {
+      @apply w-[22px];
+      @apply h-[15px];
+      @apply fill-white;
+      @include transition;
+      &:hover {
+        @apply fill-primary;
+      }
+    }
+  }
+  .logout-block {
+    .icon-logout {
+      @apply w-5;
+      @apply h-5;
+      @apply fill-white;
+      @apply cursor-pointer;
+      @include transition;
+      &:hover {
+        @apply fill-primary-100;
+      }
+    }
+  }
+}

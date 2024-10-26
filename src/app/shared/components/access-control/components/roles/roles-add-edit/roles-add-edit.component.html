@@ -1,0 +1,107 @@
+<div class="custom-form-wrapper">
+  <form
+    [formGroup]="addEditRoleForm"
+    (ngSubmit)="onSubmitAddEditRoleForm($event)"
+  >
+    <div class="custom-form-block">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="label-with-info"
+              ><span>Role Name<sup>*</sup></span>
+            </label>
+            <div
+              class="formcontrol-wrapper"
+              [ngClass]="{
+                'invalid-control': hasFormControlError('role_name')
+              }"
+            >
+              <input
+                type="text"
+                autocomplete="off"
+                class="formcontrol"
+                placeholder="Enter Role Name"
+                formControlName="role_name"
+              />
+            </div>
+            @if(hasFormControlError('role_name')) {
+            @if(formControl()['role_name'].hasError('required')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter role name</p>
+            </div>
+            } @if(formControl()['role_name'].hasError('pattern')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter valid role name</p>
+            </div>
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="label-with-info"
+              ><span>No. of Employee<sup>*</sup></span>
+            </label>
+            <div
+              class="formcontrol-wrapper"
+              [ngClass]="{
+                'invalid-control': hasFormControlError('employee_no')
+              }"
+            >
+              <input
+                type="text"
+                autocomplete="off"
+                class="formcontrol"
+                placeholder="Enter Number of Employee"
+                formControlName="employee_no"
+              />
+            </div>
+            @if(hasFormControlError('employee_no')) {
+            @if(formControl()['employee_no'].hasError('required')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter employee number</p>
+            </div>
+            } @if(formControl()['employee_no'].hasError('pattern')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter valid employee number</p>
+            </div>
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <div class="custom-toggle-slide mt-4">
+              @for(item of roleStatus(); track item.value){
+              <div class="custom-toggle-item">
+                <input
+                  type="radio"
+                  [id]="item.value"
+                  class="slide-toggle"
+                  [value]="item.value"
+                  formControlName="status"
+                />
+                <label [for]="item.value" class="slide-label">{{
+                  item.label
+                }}</label>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="custom-form-buttons-block">
+      <button
+        type="button"
+        class="btn btn-primary-outline"
+        (click)="onCancelAddRoleForm($event)"
+      >
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>

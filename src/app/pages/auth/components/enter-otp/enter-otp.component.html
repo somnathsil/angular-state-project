@@ -1,0 +1,130 @@
+<div class="auth-formbox">
+  <h1>Verification</h1>
+  <h6>
+    A one time password has been sent to your email address<br /><span>{{
+      emailForOtp
+    }}</span>
+  </h6>
+  <form [formGroup]="enterOtpForm" (ngSubmit)="enterOtpSubmit()">
+    <div class="auth-form-group">
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('otp1')"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          maxlength="1"
+          #text1
+          (keyup)="move(text1, text2, $event, 1)"
+          formControlName="otp1"
+          [ngClass]="{
+            'auth-invalid-control': hasFormControlError('otp1')
+          }"
+        />
+      </div>
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('otp2')"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          maxlength="1"
+          #text2
+          (keyup)="move(text1, text3, $event, 2)"
+          formControlName="otp2"
+          [ngClass]="{
+            'auth-invalid-control': hasFormControlError('otp2')
+          }"
+        />
+      </div>
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('otp3')"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          maxlength="1"
+          #text3
+          (keyup)="move(text2, text4, $event, 3)"
+          formControlName="otp3"
+          [ngClass]="{
+            'auth-invalid-control': hasFormControlError('otp3')
+          }"
+        />
+      </div>
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('otp4')"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          maxlength="1"
+          #text4
+          (keyup)="move(text3, text5, $event, 4)"
+          formControlName="otp4"
+          [ngClass]="{
+            'auth-invalid-control': hasFormControlError('otp4')
+          }"
+        />
+      </div>
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('otp5')"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          maxlength="1"
+          #text5
+          (keyup)="move(text4, text6, $event, 5)"
+          formControlName="otp5"
+          [ngClass]="{
+            'auth-invalid-control': hasFormControlError('otp5')
+          }"
+        />
+      </div>
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('otp6')"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          maxlength="1"
+          #text6
+          (keyup)="move(text5, text6, $event, 6)"
+          formControlName="otp6"
+          [ngClass]="{
+            'auth-invalid-control': hasFormControlError('otp6')
+          }"
+        />
+      </div>
+
+      @if(hasFormControlError('otp1') || hasFormControlError('otp2') ||
+      hasFormControlError('otp3') || hasFormControlError('otp4') ||
+      hasFormControlError('otp5') || hasFormControlError('otp6')){
+      @if(formControl()['otp1'].hasError('required') ||
+      formControl()['otp2'].hasError('required') ||
+      formControl()['otp3'].hasError('required') ||
+      formControl()['otp4'].hasError('required') ||
+      formControl()['otp5'].hasError('required') ||
+      formControl()['otp6'].hasError('required')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please Enter Your OTP</p>
+      </div>
+      } }
+    </div>
+    <div class="auth-resend-otp">
+      <p>
+        Don't receive the OTP?
+        <a (click)="resendOTP($event)">Resend OTP</a>
+      </p>
+    </div>
+    <button type="submit" class="auth-btn">Verify</button>
+    <p class="para-account">Back to <span routerLink="/">Sign In</span></p>
+  </form>
+</div>

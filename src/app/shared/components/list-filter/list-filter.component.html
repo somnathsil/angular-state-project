@@ -1,0 +1,117 @@
+<div class="filter-wrapper">
+  <div class="filter-leftside">
+    @if(!!pageTitle()){
+    <div class="left-heading">
+      <h1>
+        {{ pageTitle() }}{{ selectedName }}
+        @if(!!pageTitleMilestoneTag()){
+        <span class="milestone-tag">{{ pageTitleMilestoneTag() }}</span>
+        } @if(!!pageTitleEvalutionTag().name){
+        <span class="evaluated-tag"
+          ><strong>{{ pageTitleEvalutionTag().name }},</strong
+          >{{ pageTitleEvalutionTag().profile }}-{{
+            pageTitleEvalutionTag().role
+          }}</span
+        >
+        }
+      </h1>
+    </div>
+    } @if(filterStatus()){
+    <div class="filter-by-wrap">
+      <h4>Filtered by</h4>
+      <ul>
+        <li [ngClass]="{ active: filteredByValue === null }">
+          <a (click)="onFilteredBy(null)">All</a>
+        </li>
+        <li [ngClass]="{ active: filteredByValue === 3 }">
+          <a (click)="onFilteredBy(3)">Completed</a>
+        </li>
+        <li [ngClass]="{ active: filteredByValue === 2 }">
+          <a (click)="onFilteredBy(2)">InProgress</a>
+        </li>
+        <li [ngClass]="{ active: filteredByValue === 1 }">
+          <a (click)="onFilteredBy(1)">Upcoming</a>
+        </li>
+      </ul>
+    </div>
+    }
+  </div>
+
+  <div class="filter-rightside">
+    @if (globalSearch) {
+    <div class="search-wrapper">
+      <div class="filter-search">
+        <input
+          type="text"
+          class="formcontrol"
+          [autofocus]="false"
+          autocompleteOff="off"
+          [(ngModel)]="searchModel"
+          [placeholder]="searchPlaceholder()"
+          (ngModelChange)="onChangeSearch($event)"
+        />
+        @if (searchModel) {
+        <div class="cross_icon_wraper" (click)="onChangeSearch('')">
+          <svg class="icon icon-search-cross">
+            <use xlink:href="./assets/scss/icons.svg#icon-search-cross"></use>
+          </svg>
+        </div>
+        }
+        <svg class="icon icon-search">
+          <use xlink:href="./assets/scss/icons.svg#icon-search"></use>
+        </svg>
+      </div>
+    </div>
+    } @if(!!primaryAddButton().label){
+    <button
+      accessControl
+      [moduleId]="moduleId"
+      [submoduleId]="submoduleId"
+      [actionId]="actionId"
+      class="add-button"
+      type="button"
+      (click)="onAddPrimaryClick($event)"
+    >
+      <svg class="icon-add-plus">
+        <use
+          attr.xlink:href="./assets/scss/icons.svg#{{
+            primaryAddButton().icon
+          }}"
+        ></use>
+      </svg>
+      <p>{{ primaryAddButton().label }}</p>
+    </button>
+
+    }@if(!!isReadReceipt){
+    <div class="read-receipt-wrap">
+      <span class="read-receipt-title">Last Updated</span>
+      <div class="read-receipt-status">
+        <svg class="read-receipt-icon">
+          <use xlink:href="./assets/scss/icons.svg#icon-double-tick"></use>
+        </svg>
+        <span class="read-receipt-date">June 18, 2024</span>
+      </div>
+    </div>
+    } @if(publish){
+    <button
+      accessControl
+      [actionId]="56"
+      class="add-button publish-button"
+      type="button"
+      (click)="onPublshClick()"
+    >
+      <p>Publish Now</p>
+    </button>
+    } @if(publishForDetails){
+
+    <button class="add-button published-status-button" type="button">
+      <p>
+        <svg class="icon-double-tick">
+          <use xlink:href="./assets/scss/icons.svg#icon-double-tick"></use>
+        </svg>
+        PUBLISHED
+      </p>
+    </button>
+    }
+  </div>
+</div>

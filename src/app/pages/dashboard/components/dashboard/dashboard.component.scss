@@ -1,0 +1,18 @@
+@import "partials";
+
+.dashboard-wrapper {
+  @apply min-h-[calc(100vh-110px)];
+  @include flex-all(flex, center, center);
+  h1 {
+    @apply font-primary;
+    @apply text-3xl;
+    @apply leading-[44px];
+    @apply text-black-100;
+    @apply font-medium;
+    @apply text-center;
+    span {
+      @apply block;
+      @apply text-primary;
+    }
+  }
+}

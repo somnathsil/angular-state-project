@@ -1,0 +1,10 @@
+@import "partials";
+
+.label-with-info {
+  @include flex-all(flex, center, space-between);
+  .employee-counter {
+    @apply text-gray-300;
+    @apply text-xs;
+    @apply font-normal;
+  }
+}

@@ -1,0 +1,280 @@
+@import "partials";
+
+.filter-wrapper {
+  @apply bg-white;
+  @apply h-24;
+  @apply mb-8;
+  @apply pl-[26px] pr-5;
+  @include flex-all(flex, center, space-between);
+  @apply relative;
+  @include rounded-all("top-right", 18);
+  @include rounded-all("top-left", 18);
+  box-shadow: $adminHeaderShadow;
+}
+.filter-leftside {
+  @apply relative;
+  @apply w-full;
+  @include flex-all(flex, center, space-between);
+  .left-heading {
+    @include flex-all(flex, center);
+  }
+  h1 {
+    @apply text-black-100;
+    @include font-size(42);
+    @apply leading-none;
+    @apply font-light;
+    @apply font-primary;
+    @apply capitalize;
+    @apply relative;
+    @apply mb-0;
+    span.milestone-tag {
+      @apply border border-solid border-[#19864D];
+      @include rounded(5);
+      @apply py-px px-[5px];
+      @apply text-xs;
+      @apply font-normal;
+      @apply font-primary;
+      @apply text-[#19864D];
+      @apply relative;
+      @apply -top-0.5;
+      @apply max-w-[150px];
+      @apply min-w-[42px];
+      @apply inline-block;
+      @include property("word-break", break-all);
+    }
+    span.evaluated-tag {
+      @apply border border-solid border-gray-200;
+      @apply rounded-[5px];
+      @apply px-2 pt-1 pb-0.5;
+      @apply text-md;
+      @apply font-normal;
+      @apply leading-none;
+      @apply font-primary;
+      @apply text-black;
+      strong {
+        @apply text-lg;
+        @apply font-semibold;
+        @apply mr-1.5;
+      }
+    }
+  }
+  .filter-by-wrap {
+    @include flex-all(flex, center);
+    h4 {
+      @apply text-label;
+      @apply leading-[18px];
+      @apply font-semibold;
+      @apply font-primary;
+      @apply text-black;
+      @apply mr-5;
+    }
+    ul {
+      @include flex-all(flex, center);
+      @apply bg-gray-500;
+      @apply rounded-[10px];
+      @apply px-2.5 py-1.5;
+      @apply h-[47px];
+      li {
+        a {
+          @apply cursor-pointer;
+          @apply px-3.5 py-2;
+          @apply rounded-[5px];
+          @apply text-sm;
+          @apply leading-none;
+          @apply font-normal;
+          @apply font-primary;
+          @apply text-black;
+          @include transition;
+        }
+        &.active,
+        &:hover {
+          a {
+            @apply bg-white;
+            @apply shadow-filterByShadow;
+          }
+        }
+        &:not(:last-of-type) {
+          @apply mr-1;
+        }
+      }
+    }
+  }
+}
+.search-wrapper {
+  @apply w-[294px];
+}
+.filter-search {
+  @apply w-full;
+  @apply h-11;
+  @apply relative;
+  @include rounded(10);
+  @apply border border-solid border-gray-300;
+  input {
+    @apply h-full;
+    @apply w-full;
+    @apply py-1.5 pl-3.5 pr-20;
+    @apply bg-white;
+    @apply border-none;
+    @apply rounded-none;
+    @include rounded(10);
+    @apply text-md;
+    @apply font-normal;
+    @apply font-primary;
+    @apply text-black;
+    @apply outline-0 #{!important};
+    @apply outline-offset-0 #{!important};
+    @include transition;
+    &:focus {
+      @include property("outline", 0px !important);
+      box-shadow: $authInputBox !important;
+    }
+  }
+  .icon-search {
+    @apply absolute;
+    @apply w-[22px];
+    @apply h-[22px];
+    @apply right-3;
+    @apply top-1/2;
+    @apply transform;
+    @apply -translate-y-1/2;
+    @apply fill-black-100;
+    @apply cursor-pointer;
+    @include transition;
+    &:hover {
+      @apply fill-primary-100;
+    }
+  }
+  .cross_icon_wraper {
+    @apply absolute;
+    @apply right-[56px];
+    @apply top-1/2;
+    @apply transform;
+    @apply -translate-y-1/2;
+    &::after {
+      @apply empty-content;
+      @apply absolute;
+      @apply right-[-11px];
+      @apply top-1/2;
+      @apply transform;
+      @apply -translate-y-1/2;
+      @apply w-px;
+      @apply h-6;
+      @apply bg-[#E8E8EC];
+    }
+  }
+  .icon-search-cross {
+    @apply w-[22px];
+    @apply h-[22px];
+    @apply p-[2.5px];
+    @apply fill-black-100;
+    @apply cursor-pointer;
+    @include transition;
+    @apply block;
+    &:hover {
+      @apply fill-primary-100;
+    }
+  }
+}
+.filter-search input::-webkit-input-placeholder {
+  @include search-placeholder;
+}
+.filter-search input:-moz-placeholder {
+  @include search-placeholder;
+}
+.filter-search input::-moz-placeholder {
+  @include search-placeholder;
+}
+.filter-search input:-ms-input-placeholder {
+  @include search-placeholder;
+}
+.filter-search input::-ms-input-placeholder {
+  @include search-placeholder;
+}
+.filter-search input::placeholder {
+  @include search-placeholder;
+}
+.filter-search input:-webkit-autofill {
+  @include search-autofill;
+}
+.filter-search input:-webkit-autofill:focus {
+  @include search-autofill;
+}
+
+.filter-rightside {
+  @apply h-full;
+  @apply w-full;
+  @apply gap-x-6;
+  @include flex-all(flex, center, flex-end);
+  .add-button {
+    @apply h-11;
+    @apply w-max;
+    @apply rounded-3xl;
+    @apply bg-black-100;
+    @apply cursor-pointer;
+    @apply py-2 pl-4 pr-[18px];
+    @include flex-all(flex, center, center);
+    @apply gap-x-2.5;
+    @include transition;
+    p {
+      @apply font-primary;
+      @apply text-base;
+      @apply leading-none;
+      @apply font-normal;
+      @apply text-white;
+      @apply capitalize;
+    }
+    svg {
+      @apply w-3.5;
+      @apply h-3.5;
+      @apply fill-white;
+      @include transition;
+    }
+    &:hover {
+      @apply bg-primary-100;
+      svg {
+        @apply fill-white;
+      }
+    }
+  }
+
+  .read-receipt-wrap {
+    @apply pr-4;
+    .read-receipt-title {
+      @apply text-[8px];
+      @apply leading-2;
+      @apply font-normal;
+      @apply font-primary;
+      @apply text-gray-300;
+      @apply uppercase;
+      @apply mb-2;
+      @apply inline-block;
+      @apply tracking-[1.68px];
+      @apply relative;
+
+      &::after {
+        @apply empty-content;
+        @apply absolute;
+        @apply left-0;
+        @apply bottom-0;
+        @apply w-full;
+        @apply h-px;
+        @apply bg-gray-300;
+      }
+    }
+    .read-receipt-status {
+      @include flex-all(flex, center, center);
+      @apply -ml-1;
+      > svg {
+        @apply w-[30px];
+        @apply h-3;
+        @apply fill-green;
+      }
+      .read-receipt-date {
+        @apply text-xs;
+        @apply font-normal;
+        @apply text-black;
+        @apply font-primary;
+      }
+    }
+  }
+}

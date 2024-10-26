@@ -1,0 +1,35 @@
+<section class="dialog-wrapper">
+  <header class="dialog-close-block">
+    <a (click)="onCancelDialogFn()">&#x2715;</a>
+  </header>
+  <main>
+    <div class="warning-icon">
+      <img [src]="photoIcon" alt="" />
+    </div>
+    <div class="dialog-content">
+      <p>{{ message }}</p>
+    </div>
+  </main>
+  <footer class="dialog-actions">
+    <button
+      [ngClass]="{
+        'btn-primary': dialogType === 'warning',
+      }"
+      type="button"
+      class="btn"
+      (click)="onConfirmDialogFn($event)"
+    >
+      {{ confirmButtonText }}
+    </button>
+    <button
+      [ngClass]="{
+        'btn-primary-outline': dialogType === 'warning',
+      }"
+      type="button"
+      class="btn"
+      (click)="onCancelDialogFn()"
+    >
+      {{ cancelButtonText }}
+    </button>
+  </footer>
+</section>

@@ -1,0 +1,98 @@
+@import "partials";
+
+.stretch-screen {
+  @apply w-screen;
+  @apply h-screen;
+}
+
+.auth-outer {
+  @apply w-screen;
+  @apply h-[96vh];
+  @apply relative;
+  @include flex-all(flex, center, flex-end);
+  .auth-inner {
+    @extend .stretch-screen;
+    @apply relative;
+    @apply z-20;
+    .auth-form {
+      @apply w-screen;
+      @apply h-screen;
+      @apply relative;
+      @include flex-all(flex, center, center);
+      @apply px-16;
+    }
+  }
+}
+.auth-form-content {
+  @apply h-auto;
+  @include flex-all(flex, normal, space-between);
+}
+.auth-logobox {
+  @include flex-all(flex, start, space-between);
+  @apply flex-col;
+  @apply h-auto;
+  @apply pb-8;
+  h1 {
+    @apply text-primary;
+    @apply text-[50px];
+    @apply font-bold;
+    @apply leading-[106.8%];
+    span {
+      @apply text-white;
+      @apply leading-[106.8%];
+    }
+  }
+
+  .auth-content {
+    @apply mr-[9rem];
+    h4 {
+      @apply text-white;
+      @apply text-[40px];
+      @apply font-bold;
+      @apply leading-[106.8%];
+      span {
+        @apply text-primary;
+        @apply block;
+        @apply mt-2.5;
+        @apply text-[44px];
+        @apply leading-[106.8%];
+      }
+    }
+    p {
+      @apply text-[#818181];
+      @apply text-[21px];
+      @apply leading-8;
+      @apply font-normal;
+      @apply mt-7;
+      @apply w-[488px];
+      @include property("text-shadow", 0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+  }
+}
+.auth-formbox-wrapper {
+  @apply w-auto;
+  @apply max-w-[90%];
+  @apply relative;
+  @apply h-auto;
+  @apply relative;
+  footer {
+    @apply text-center;
+    @apply mt-10;
+    @apply absolute;
+    @apply left-0;
+    @apply bottom-[-42px];
+    @apply w-full;
+    p {
+      @apply text-md;
+      @apply font-normal;
+      @apply leading-4;
+      @apply text-white;
+      @apply font-primary;
+      @apply tracking-[0.14px];
+      @apply capitalize;
+      @apply m-0;
+      @include property("text-shadow", 0.15px);
+      @include property("letter-spacing", 0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+  }
+}

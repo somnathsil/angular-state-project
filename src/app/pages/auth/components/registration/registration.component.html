@@ -1,0 +1,142 @@
+<div class="auth-formbox">
+  <h1>Register <span>to</span><small>Our Hub</small></h1>
+  <h6>Create your credentials to access account.</h6>
+  <form [formGroup]="registrationForm" (ngSubmit)="registrationSubmit()">
+    <div class="auth-form-group">
+      <div
+        class="auth-formcontrol-wrapper"
+        [ngClass]="{ 'auth-invalid-control': hasFormControlError('name') }"
+      >
+        <input
+          type="text"
+          class="auth-formcontrol"
+          placeholder="Name"
+          autocomplete="off"
+          formControlName="name"
+        />
+      </div>
+      @if(hasFormControlError('name')) {
+      @if(formControl()['name'].hasError('required')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please enter your name</p>
+      </div>
+      } @if(formControl()['name'].hasError('pattern')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please enter a valid name</p>
+      </div>
+      } }
+    </div>
+    <div class="auth-form-group">
+      <div
+        class="auth-formcontrol-wrapper"
+        [ngClass]="{ 'auth-invalid-control': hasFormControlError('email') }"
+      >
+        <input
+          type="email"
+          class="auth-formcontrol"
+          placeholder="Email"
+          autocomplete="off"
+          formControlName="email"
+        />
+        <a>
+          <svg class="icon">
+            <use xlink:href="./assets/scss/icons.svg#icon-envelope"></use>
+          </svg>
+        </a>
+      </div>
+      @if(hasFormControlError('email')) {
+      @if(formControl()['email'].hasError('required')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please enter your email</p>
+      </div>
+      } @if(formControl()['email'].hasError('pattern')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please enter a valid email</p>
+      </div>
+      } }
+    </div>
+    <div class="auth-form-group">
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('new_password')"
+      >
+        <input
+          [type]="showTypePassword() ? 'text' : 'password'"
+          class="auth-formcontrol"
+          placeholder="Password"
+          autocomplete="off"
+          formControlName="new_password"
+        />
+        <a class="icon-block" (click)="showIconType(0)">
+          @if(showTypePassword()) {
+          <svg>
+            <use xlink:href="./assets/scss/icons.svg#icon-eye-open"></use>
+          </svg>
+          } @else {
+          <svg class="icon-close">
+            <use xlink:href="./assets/scss/icons.svg#icon-eye-close"></use>
+          </svg>
+          }
+        </a>
+      </div>
+      @if(hasFormControlError('new_password')) {
+      @if(formControl()['new_password'].hasError('required')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please enter your password</p>
+      </div>
+      } @if(formControl()['new_password'].hasError('minlength')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Password minimum 6 characters</p>
+      </div>
+      } }
+    </div>
+    <div class="auth-form-group">
+      <div
+        class="auth-formcontrol-wrapper"
+        [class.auth-invalid-control]="hasFormControlError('con_password')"
+      >
+        <input
+          [type]="showTypeConfirmPassword() ? 'text' : 'password'"
+          class="auth-formcontrol"
+          placeholder="Confirm Password"
+          autocomplete="off"
+          formControlName="con_password"
+        />
+        <a class="icon-block" (click)="showIconType(1)">
+          @if(showTypeConfirmPassword()) {
+          <svg>
+            <use xlink:href="./assets/scss/icons.svg#icon-eye-open"></use>
+          </svg>
+          } @else {
+          <svg class="icon-close">
+            <use xlink:href="./assets/scss/icons.svg#icon-eye-close"></use>
+          </svg>
+          }
+        </a>
+      </div>
+      @if(hasFormControlError('con_password')) {
+      @if(formControl()['con_password'].hasError('required')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Please enter your confirm password</p>
+      </div>
+      } @if(formControl()['con_password'].hasError('minlength')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Password minimum 6 characters</p>
+      </div>
+      } @if(formControl()['con_password'].hasError('passwordMismatch')) {
+      <div [@fadeAnimation] class="auth-error-message">
+        <p>Passwords Must Match</p>
+      </div>
+      } }
+    </div>
+    <div class="auth-checkbox">
+      <label class="customCheckbox"
+        >I agree with terms and conditions
+        <input type="checkbox" formControlName="terms" />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+    <button type="submit" class="auth-btn">Sign Up</button>
+    <p class="para-account">Back to <span routerLink="/">Sign In</span></p>
+  </form>
+</div>

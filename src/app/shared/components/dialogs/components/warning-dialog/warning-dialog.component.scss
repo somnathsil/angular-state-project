@@ -1,0 +1,60 @@
+@import "partials";
+
+::ng-deep .custom-warning-dialog {
+  .mat-mdc-dialog-container {
+    @apply w-[45rem];
+    @apply max-w-full;
+  }
+  .mat-mdc-dialog-surface {
+    @apply rounded-2xl #{!important};
+  }
+  .dialog-wrapper {
+    @apply text-center;
+    @apply py-5 pb-11 px-7;
+  }
+  .dialog-close-block {
+    @apply absolute;
+    @apply right-4;
+    @apply top-4;
+    a {
+      @apply block;
+      @apply w-6;
+      @apply h-6;
+      @apply rounded-[2px];
+      @apply bg-primary;
+      @apply text-[19px];
+      @apply leading-[26px];
+      @apply text-white;
+      @apply cursor-pointer;
+      @apply transition;
+      &:hover {
+        @apply bg-primary;
+      }
+    }
+  }
+  .warning-icon {
+    @apply w-[7rem];
+    @apply mt-12 mx-auto mb-8;
+  }
+  .dialog-content {
+    @apply max-w-[34rem];
+    @apply mx-auto;
+    p {
+      @apply text-black;
+      @apply text-2xl;
+      @apply leading-8;
+      @apply font-semibold;
+    }
+  }
+  .dialog-actions {
+    @include flex-all(flex, center, center);
+    @apply pt-9;
+    button {
+      @apply mx-2;
+      @apply px-3;
+      @apply text-[15px];
+      @apply min-w-[91px];
+      @apply h-11;
+    }
+  }
+}

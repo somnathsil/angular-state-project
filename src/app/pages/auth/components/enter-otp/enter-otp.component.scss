@@ -1,0 +1,123 @@
+@import "partials";
+
+.auth-formbox {
+  @apply bg-white;
+  @apply relative;
+  @include rounded(25);
+  @apply w-[512px];
+  @apply h-auto;
+  @apply pt-9 pb-9 px-9;
+  @apply overflow-hidden;
+  h1 {
+    @apply text-[45px];
+    @apply leading-[45px];
+    @apply font-light;
+    @apply text-black-100;
+    @apply font-primary;
+    @apply mb-5;
+  }
+  h6 {
+    @apply text-base;
+    @apply font-normal;
+    @apply leading-6;
+    @apply text-[#6E6E73];
+    @apply font-primary;
+    @apply mb-10;
+    span {
+      @apply block;
+      @apply text-primary-100;
+    }
+  }
+  &::after {
+    @apply empty-content;
+    @apply w-[89px];
+    @apply h-[81px];
+    @apply absolute;
+    @apply top-0;
+    @apply right-0;
+    @include background-image("auth-corner-globe.png", no-repeat, $size: cover);
+  }
+}
+
+.auth-form-group {
+  @include flex-all(flex, center, center);
+  .auth-formcontrol-wrapper {
+    @apply w-1/5;
+    @apply max-w-[75px];
+    &:not(:first-child) {
+      @apply ml-[3%];
+    }
+    .auth-formcontrol {
+      @apply p-1.5;
+      @apply text-center;
+      @apply text-1xl;
+      @apply leading-none;
+      @apply font-normal;
+    }
+  }
+}
+
+.auth-resend-otp {
+  @apply pb-9;
+  @apply text-center;
+  p {
+    @apply text-[#6E6E73];
+    @apply font-medium;
+    @apply text-md;
+    @apply leading-none;
+    a {
+      @apply text-primary;
+      @apply font-semibold;
+      @apply cursor-pointer;
+      @include transition;
+      &:hover {
+        @apply text-primary-100;
+      }
+    }
+  }
+}
+
+/* 
+ * *Auth button styles
+ * @designer: Sure Das
+ */
+.auth-btn {
+  @apply pt-1.5 pb-2.5;
+  @apply px-6;
+  @apply h-[55px];
+  @apply w-full;
+  @apply capitalize;
+  @apply text-center;
+  @include rounded(5);
+  @apply text-1xl;
+  @apply leading-none;
+  @apply font-primary;
+  @apply font-normal;
+  @apply text-white;
+  @apply bg-primary;
+  @include flex-all(flex, center, center);
+  @apply border border-solid border-transparent;
+  @apply select-none;
+  @apply cursor-pointer;
+  @apply whitespace-normal;
+  @include transition;
+  &:hover {
+    @apply bg-primary-100;
+  }
+}
+
+.para-account {
+  @apply mt-5;
+  @apply text-center;
+  @apply text-black-100;
+  span {
+    @apply text-primary;
+    @apply font-medium;
+    @apply underline;
+    @apply cursor-pointer;
+    @include transition;
+    &:hover {
+      @apply text-primary-100;
+    }
+  }
+}

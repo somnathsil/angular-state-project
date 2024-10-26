@@ -1,0 +1,108 @@
+<div class="custom-form-wrapper">
+  <form
+    [formGroup]="addEditDepartmentForm"
+    (ngSubmit)="onSubmitAddEditDepartmentForm($event)"
+  >
+    <div class="custom-form-block">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="label-with-info">
+              <span>Department Name<sup>*</sup></span>
+            </label>
+            <div
+              class="formcontrol-wrapper"
+              [ngClass]="{
+                'invalid-control': hasFormControlError('dept_name')
+              }"
+            >
+              <input
+                type="text"
+                autocomplete="off"
+                class="formcontrol"
+                placeholder="Enter Department Name"
+                formControlName="dept_name"
+              />
+            </div>
+            @if(hasFormControlError('dept_name')){
+            @if(formControl()['dept_name'].hasError('required')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter department name</p>
+            </div>
+            } @if(formControl()['dept_name'].hasError('pattern')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter valid department name</p>
+            </div>
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="label-with-info"
+              ><span>No. of Employee<sup>*</sup></span>
+            </label>
+            <div
+              class="formcontrol-wrapper"
+              [ngClass]="{
+                'invalid-control': hasFormControlError('employee_no')
+              }"
+            >
+              <input
+                type="text"
+                autocomplete="off"
+                class="formcontrol"
+                placeholder="Enter Number of Employee"
+                formControlName="employee_no"
+              />
+            </div>
+            @if(hasFormControlError('employee_no')) {
+            @if(formControl()['employee_no'].hasError('required')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter employee number</p>
+            </div>
+            } @if(formControl()['employee_no'].hasError('pattern')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter valid employee number</p>
+            </div>
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <div class="custom-toggle-slide mt-4">
+              @for(item of departmentStatus(); track item.value){
+              <div class="custom-toggle-item">
+                <input
+                  type="radio"
+                  [id]="item.value"
+                  class="slide-toggle"
+                  [value]="item.value"
+                  formControlName="status"
+                />
+                <label [for]="item.value" class="slide-label">{{
+                  item.label
+                }}</label>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="custom-form-buttons-block">
+      <button
+        type="button"
+        class="btn btn-primary-outline"
+        (click)="onCancelAddDepartmentForm($event)"
+      >
+        Cancel
+      </button>
+
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>

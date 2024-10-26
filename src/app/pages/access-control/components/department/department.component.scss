@@ -1,0 +1,49 @@
+@import "partials";
+
+.department-list-table ::ng-deep {
+  .mat-table {
+    thead tr th,
+    tbody tr td {
+      @apply w-[12%];
+    }
+
+    thead tr th:first-of-type,
+    tbody tr td:first-of-type {
+      @apply w-[21%];
+    }
+
+    thead tr th:nth-of-type(2),
+    tbody tr td:nth-of-type(2) {
+      @apply w-[28%];
+    }
+    tbody {
+      @apply min-h-[calc(100vh-320px)];
+    }
+  }
+}
+.custom-datatable-cont {
+  p {
+    strong {
+      @apply text-lg;
+      @apply font-semibold;
+      @apply leading-none;
+    }
+  }
+}
+
+// responsive css
+@media only screen and (min-width: 1576px) {
+  .department-list-table ::ng-deep {
+    .mat-table {
+      thead tr th:first-of-type,
+      tbody tr td:first-of-type {
+        @apply w-[30%];
+      }
+
+      thead tr th:nth-of-type(2),
+      tbody tr td:nth-of-type(2) {
+        @apply w-[50%];
+      }
+    }
+  }
+}

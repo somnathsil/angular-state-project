@@ -1,0 +1,174 @@
+@import "partials";
+
+.auth-formbox {
+  @apply bg-white;
+  @apply relative;
+  @include rounded(25);
+  @apply w-[512px];
+  @apply h-auto;
+  @apply pt-7 pb-7 px-7;
+  @apply overflow-hidden;
+  h1 {
+    @apply text-[45px];
+    @apply leading-[45px];
+    @apply font-light;
+    @apply text-black-100;
+    @apply font-primary;
+    @apply mb-3.5;
+    > span {
+      @apply text-[23px];
+      @apply leading-normal;
+      @apply font-normal;
+      @apply tracking-[0.46px];
+    }
+    > small {
+      @apply text-[23px];
+      @apply leading-normal;
+      @apply font-normal;
+      @apply tracking-[0.46px];
+      @apply text-primary;
+      @apply ml-1.5;
+    }
+  }
+  h6 {
+    @apply text-base;
+    @apply font-normal;
+    @apply leading-4;
+    @apply text-[#6E6E73];
+    @apply font-primary;
+    @apply mb-10;
+  }
+  &::after {
+    @apply empty-content;
+    @apply w-[89px];
+    @apply h-[81px];
+    @apply absolute;
+    @apply top-0;
+    @apply right-0;
+    @include background-image("auth-corner-globe.png", no-repeat, $size: cover);
+  }
+}
+
+/* Auth Checkbox */
+.auth-checkbox {
+  @apply mb-[30px];
+  @include flex-all(flex, center, space-between);
+  .customCheckbox {
+    @apply relative;
+    @apply inline-block;
+    @apply pl-[34px];
+    @apply text-base;
+    @apply leading-[27px];
+    @apply font-light;
+    @apply text-black;
+    @apply font-primary;
+    @apply cursor-pointer;
+    @include property("-webkit-user-select", none);
+    @include property("-moz-user-select", none);
+    @include property("-ms-user-select", none);
+    @include property("user-select", none);
+    @include transition;
+    &:hover {
+      @apply text-primary;
+    }
+  }
+  .customCheckbox input {
+    @apply absolute;
+    @apply cursor-pointer;
+    @apply w-0;
+    @apply h-0;
+    @apply appearance-none;
+    @include property("-webkit-appearance", none);
+    @include property("-moz-appearance", none);
+  }
+  .checkmark {
+    @apply absolute;
+    @apply top-0.5;
+    @apply left-0;
+    @apply h-[23px];
+    @apply w-[23px];
+    @apply rounded-[5px];
+    @apply border border-solid border-gray;
+  }
+  .customCheckbox input:checked ~ .checkmark {
+    @apply bg-black-100;
+    @apply border-black-100;
+  }
+  .checkmark:after {
+    @apply empty-content;
+    @apply absolute;
+    @apply hidden;
+  }
+  .customCheckbox input:checked ~ .checkmark:after {
+    @apply block;
+  }
+  .customCheckbox .checkmark:after {
+    @apply left-2;
+    @apply top-[3px];
+    @apply w-1.5;
+    @apply h-[11px];
+    @apply border border-solid border-white;
+    @include property("border-width", 0 2px 2px 0);
+    @include property("-webkit-transform", rotate(45deg));
+    @include property("-ms-transform", rotate(45deg));
+    @include property("transform", rotate(45deg));
+  }
+  .back-to-link {
+    @apply text-base;
+    @apply leading-[27px];
+    @apply font-light;
+    @apply text-black;
+    @apply font-primary;
+    @apply capitalize;
+    @apply cursor-pointer;
+    @include transition;
+    &:hover {
+      @apply text-primary;
+    }
+  }
+}
+
+/* 
+ * *Auth button styles
+ * @designer: Sure Das
+ */
+.auth-btn {
+  @apply pt-1.5 pb-2.5;
+  @apply px-6;
+  @apply h-[55px];
+  @apply w-full;
+  @apply capitalize;
+  @apply text-center;
+  @include rounded(5);
+  @apply text-1xl;
+  @apply leading-none;
+  @apply font-primary;
+  @apply font-normal;
+  @apply text-white;
+  @apply bg-primary;
+  @include flex-all(flex, center, center);
+  @apply border border-solid border-transparent;
+  @apply select-none;
+  @apply cursor-pointer;
+  @apply whitespace-normal;
+  @include transition;
+  &:hover {
+    @apply bg-primary-100;
+  }
+}
+
+.para-account {
+  @apply mt-5;
+  @apply text-center;
+  @apply text-black-100;
+  span {
+    @apply text-primary;
+    @apply font-medium;
+    @apply underline;
+    @apply cursor-pointer;
+    @include transition;
+    &:hover {
+      @apply text-primary-100;
+    }
+  }
+}
