@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -9,6 +9,7 @@ import {
   angularSidenavModule,
   angularTableModule,
 } from '@app/core/modules';
+import { CommonService } from '@app/core/services';
 import { RolesSidebarWrapperComponent } from '@app/shared/components/access-control/components';
 import { ListFilterComponent } from '@app/shared/components/list-filter/list-filter.component';
 import { PaginatorDirective } from '@app/shared/directives';
@@ -36,6 +37,8 @@ export interface ISupplierAuditTrialList {
   styleUrl: './roles.component.scss',
 })
 export class RolesComponent implements OnInit {
+  private _common = inject(CommonService);
+
   public pageSize = 10;
   public count!: number;
   public pageNumber!: string;
@@ -89,6 +92,7 @@ export class RolesComponent implements OnInit {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
+    this._common.setLoadingStatus(false);
     this.dataList.paginator = this.paginator;
   }
 

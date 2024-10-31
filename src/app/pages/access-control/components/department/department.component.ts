@@ -1,4 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { appSettings } from '@app/configs';
@@ -8,6 +9,7 @@ import {
   angularFormsModule,
   angularSidenavModule,
 } from '@app/core/modules';
+import { CommonService } from '@app/core/services';
 import { DepartmentSidebarWrapperComponent } from '@app/shared/components/access-control/components';
 import { ListFilterComponent } from '@app/shared/components/list-filter/list-filter.component';
 import { PaginatorDirective } from '@app/shared/directives';
@@ -29,9 +31,12 @@ import { PaginatorDirective } from '@app/shared/directives';
   styleUrl: './department.component.scss',
 })
 export class DepartmentComponent implements OnInit {
+  private _common = inject(CommonService);
+
   public pageSize = 10;
   public count!: number;
   public pageNumber!: string;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   public noOfEmpFilterValue: number | null = null;
   public noOfEmpFilterMethod: string = 'equals';
   public nameMatchMode: string = 'startsWith';
@@ -80,6 +85,11 @@ export class DepartmentComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  ngAfterViewInit() {
+    this._common.setLoadingStatus(false);
+    this.dataList.paginator = this.paginator;
+  }
 
   /* Open department sidebar */
   onAddEditSidebarOpen(event: Event, sidebarType: 'add' | 'edit') {

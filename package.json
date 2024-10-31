@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@ngx-loading-bar/core": "^6.0.2",
+    "@ngxs/logger-plugin": "^18.1.4",
+    "@ngxs/store": "^18.1.4",
     "ngx-cookie-service": "^18.0.0",
     "ngx-toastr": "^19.0.0",
     "normalize.css": "^8.0.1",
