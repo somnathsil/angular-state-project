@@ -1,6 +1,7 @@
 import {
   Component,
   computed,
+  Inject,
   inject,
   OnDestroy,
   OnInit,
@@ -16,7 +17,9 @@ import {
 import { appSettings } from '@app/configs';
 import { angularFormsModule, angularModule } from '@app/core/modules';
 import { fadeAnimation } from '@app/shared/animations';
+import { AddRole } from '@app/store';
 import { LoadingBarService } from '@ngx-loading-bar/core';
+import { Store } from '@ngxs/store';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -29,8 +32,10 @@ import { Subscription } from 'rxjs/internal/Subscription';
   animations: [fadeAnimation],
 })
 export class RolesAddEditComponent implements OnInit, OnDestroy {
+  private _store = inject(Store);
   private _toastr = inject(ToastrService);
   private _formBuilder = inject(FormBuilder);
+  private _loader = inject(LoadingBarService);
   private _loadingBar = inject(LoadingBarService);
 
   public addEditRoleForm!: FormGroup;
@@ -54,12 +59,11 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
    */
   private initAddEditRoleForm(): void {
     this.addEditRoleForm = this._formBuilder.group({
-      id: new FormControl(0),
-      role_name: new FormControl('', [
+      name: new FormControl('', [
         Validators.required,
         Validators.pattern(appSettings.whitespacePattern),
       ]),
-      employee_no: new FormControl('', [
+      number_of_employees: new FormControl('', [
         Validators.required,
         Validators.pattern(appSettings.whitespacePattern),
       ]),
@@ -94,8 +98,38 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
   onSubmitAddEditRoleForm(event: Event): boolean | void {
     if (!this.isDisabled()) {
       this.submitted.set(true);
-      const formValue = this.addEditRoleForm.getRawValue();
-      console.log(formValue);
+      const formValue = {
+        ...this.addEditRoleForm.value,
+        number_of_employees: +this.addEditRoleForm.value.number_of_employees,
+      };
+
+      // stop here if form is invalid
+      if (this.addEditRoleForm.invalid) {
+        this.addEditRoleForm.markAllAsTouched();
+        return true;
+      }
+
+      this.isDisabled.set(true);
+      this._loadingBar.useRef().start();
+      this.subscriptions.push(
+        this._store.dispatch(new AddRole(formValue)).subscribe({
+          next: (apiResult) => {
+            this.submitted.set(false);
+            this.isDisabled.set(false);
+            this._loader.useRef().complete();
+            this.onCancelAddRoleForm(event);
+          },
+          error: (apiError) => {
+            this.submitted.set(false);
+            this.isDisabled.set(false);
+            this._loadingBar.useRef().complete();
+            this._toastr.error(apiError.error.response.status.msg, 'error', {
+              closeButton: true,
+              timeOut: 3000,
+            });
+          },
+        })
+      );
     }
   }
 

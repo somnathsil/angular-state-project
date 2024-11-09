@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { FetchRoleList } from '../actions/access-control.action';
+import { AddRole, FetchRoleList } from '../actions/access-control.action';
 import { pipe, tap } from 'rxjs';
 import { HttpService } from '@app/core/http';
 import { ToastrService } from 'ngx-toastr';
+import { insertItem, patch } from '@ngxs/store/operators';
 
 interface IAccessControlModel {
   roleList: IRoleList[];
@@ -33,7 +34,35 @@ export class AccessControlState {
   ) {
     return this._http.post('role/list', param).pipe(
       tap((apiResult) => {
-        console.log(apiResult);
+        const result = apiResult.response.dataset;
+        ctx.patchState({
+          roleList: result,
+          // roleListCount: result.total_rows,
+        });
+      })
+    );
+  }
+
+  @Action(AddRole)
+  AddRole(ctx: StateContext<IAccessControlModel>, { param }: AddRole) {
+    return this._http.post('role/add', param).pipe(
+      tap((apiResult) => {
+        console.log('ddhdhdhdh', param);
+
+        let addedItem: any = {
+          name: param.name,
+          status: param.status,
+          number_of_employees: param.number_of_employees,
+        };
+        ctx.setState(
+          patch({
+            roleList: insertItem<IRoleList>(addedItem),
+          })
+        );
+        this._toastr.success(apiResult.response.status.message, 'success', {
+          closeButton: true,
+          timeOut: 3000,
+        });
       })
     );
   }
