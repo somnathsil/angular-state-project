@@ -1,29 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   NavigationCancel,
   NavigationEnd,
   NavigationError,
   NavigationStart,
   Router,
+  RouterModule,
   RouterOutlet,
 } from '@angular/router';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { PreloaderComponent } from './shared/components/preloader/preloader.component';
 import { Subscription } from 'rxjs';
 import { CommonService } from './core/services';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoadingBarModule, PreloaderComponent],
+  imports: [CommonModule, RouterOutlet, LoadingBarModule, PreloaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'angular-state-project';
-  private currentURL = '';
+  private _router = inject(Router);
+  private _common = inject(CommonService);
+
   private subscriptions: Subscription[] = [];
-  constructor(private _router: Router, private _common: CommonService) {}
+
+  constructor() {}
 
   ngOnInit(): void {
     this.handleLoadingState();
@@ -31,26 +35,23 @@ export class AppComponent implements OnInit {
 
   private handleLoadingState() {
     this.subscriptions.push(
-      this._router.events.subscribe((event: any) => {
-        if (event instanceof NavigationStart) {
-          const URl = event.url;
-          if (
-            URl.split('?')[0].split('#')[0] !==
-            this.currentURL.split('?')[0].split('#')[0]
-          ) {
+      this._router.events.subscribe((event) => {
+        switch (true) {
+          case event instanceof NavigationStart: {
             this._common.setLoadingStatus(true);
+            break;
           }
-        }
-        if (event instanceof NavigationEnd) {
-          this.currentURL = event.url;
-        }
-        if (
-          event instanceof NavigationCancel ||
-          event instanceof NavigationError
-        ) {
-          this._common.setLoadingStatus(false);
+          case event instanceof NavigationCancel:
+          case event instanceof NavigationError: {
+            this._common.setLoadingStatus(false);
+            break;
+          }
         }
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

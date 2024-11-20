@@ -3,6 +3,7 @@ import {
   computed,
   Inject,
   inject,
+  input,
   OnDestroy,
   OnInit,
   output,
@@ -17,7 +18,7 @@ import {
 import { appSettings } from '@app/configs';
 import { angularFormsModule, angularModule } from '@app/core/modules';
 import { fadeAnimation } from '@app/shared/animations';
-import { AddRole } from '@app/store';
+import { AddRole, EditRole } from '@app/store';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Store } from '@ngxs/store';
 import { ToastrService } from 'ngx-toastr';
@@ -35,7 +36,6 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
   private _store = inject(Store);
   private _toastr = inject(ToastrService);
   private _formBuilder = inject(FormBuilder);
-  private _loader = inject(LoadingBarService);
   private _loadingBar = inject(LoadingBarService);
 
   public addEditRoleForm!: FormGroup;
@@ -47,13 +47,21 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
     { value: 1, label: 'Active' },
     { value: 0, label: 'Inactive' },
   ]);
+
+  public pageType = input<string>();
+  public selectedRole = input<IRoleList | null>();
   closeSidebar = output<Event>({ alias: 'closeSidebar' });
 
   constructor() {}
 
   ngOnInit(): void {
     this.initAddEditRoleForm();
+    this.addEditRoleForm.addControl('id', new FormControl(''));
+    if (this.pageType() === 'edit') {
+      this.patchAddEditRole();
+    }
   }
+
   /**
    * *Initializing form controls in roles form
    */
@@ -69,6 +77,17 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
       ]),
       status: new FormControl(1),
     });
+  }
+
+  patchAddEditRole() {
+    if (this.selectedRole()) {
+      this.addEditRoleForm.patchValue({
+        id: this.selectedRole()?.id,
+        name: this.selectedRole()?.name,
+        number_of_employees: this.selectedRole()?.numberOfEmployees,
+        status: this.selectedRole()?.status,
+      });
+    }
   }
 
   /**
@@ -111,25 +130,47 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
 
       this.isDisabled.set(true);
       this._loadingBar.useRef().start();
-      this.subscriptions.push(
-        this._store.dispatch(new AddRole(formValue)).subscribe({
-          next: (apiResult) => {
-            this.submitted.set(false);
-            this.isDisabled.set(false);
-            this._loader.useRef().complete();
-            this.onCancelAddRoleForm(event);
-          },
-          error: (apiError) => {
-            this.submitted.set(false);
-            this.isDisabled.set(false);
-            this._loadingBar.useRef().complete();
-            this._toastr.error(apiError.error.response.status.msg, 'error', {
-              closeButton: true,
-              timeOut: 3000,
-            });
-          },
-        })
-      );
+      if (this.pageType() === 'add') {
+        this.subscriptions.push(
+          this._store.dispatch(new AddRole(formValue)).subscribe({
+            next: (apiResult) => {
+              this.submitted.set(false);
+              this.isDisabled.set(false);
+              this._loadingBar.useRef().complete();
+              this.onCancelAddRoleForm(event);
+            },
+            error: (apiError) => {
+              this.submitted.set(false);
+              this.isDisabled.set(false);
+              this._loadingBar.useRef().complete();
+              this._toastr.error(apiError.error.response.status.msg, 'error', {
+                closeButton: true,
+                timeOut: 3000,
+              });
+            },
+          })
+        );
+      } else {
+        this.subscriptions.push(
+          this._store.dispatch(new EditRole(formValue)).subscribe({
+            next: (apiResult) => {
+              this.submitted.set(false);
+              this.isDisabled.set(false);
+              this._loadingBar.useRef().complete();
+              this.onCancelAddRoleForm(event);
+            },
+            error: (apiError) => {
+              this.submitted.set(false);
+              this.isDisabled.set(false);
+              this._loadingBar.useRef().complete();
+              this._toastr.error(apiError.error.response.status.msg, 'error', {
+                closeButton: true,
+                timeOut: 3000,
+              });
+            },
+          })
+        );
+      }
     }
   }
 

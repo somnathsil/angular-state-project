@@ -1,21 +1,30 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonService } from '@app/core/services';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'preloader',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterModule],
   templateUrl: './preloader.component.html',
   styleUrl: './preloader.component.scss',
 })
-export class PreloaderComponent {
+export class PreloaderComponent implements AfterViewInit {
   public isLoading!: boolean;
   private subscriptions: Subscription[] = [];
-  constructor(private _commonService: CommonService) {}
+  constructor(
+    private _commonService: CommonService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.getPreloaderStatus();
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
   }
 
   /**

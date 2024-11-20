@@ -1,4 +1,6 @@
 interface IRoleListParam {
+  first: number;
+  rows: number;
   filters: {
     name: {
       matchMode: string;
@@ -13,6 +15,7 @@ interface IRoleListParam {
       value: number;
     };
   };
+  globalFilter: string;
 }
 interface IRoleList {
   id: number;

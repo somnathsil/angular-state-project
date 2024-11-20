@@ -5,7 +5,7 @@ export const appSettings = {
   refreshTokenKey: 'state_project_refresh_token',
   otpCredential: 'state_project-otp-info',
   ajaxTimeout: 300000,
-  rowsPerPage: 5,
+  rowsPerPage: 3,
   accentedCharacters: 'áéíóúüâêôãõàèìòùçÀÁÂÃÉÊÍÓÔÕÚÜÇ',
   whitespacePattern: /^\S+?(?: \S+)*\s?$/,
   userManagementRollId: 1,

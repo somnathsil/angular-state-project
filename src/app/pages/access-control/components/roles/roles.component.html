@@ -7,7 +7,7 @@
         label: 'Add Role',
         icon: 'icon-add-plus-filter'
       }"
-      (open-sidebar)="onAddEditSidebarOpen($event, 'add')"
+      (open-sidebar)="onAddEditSidebarOpen($event, 'add', null)"
     />
   </section>
   <div class="custom-page-wrapper">
@@ -26,8 +26,11 @@
                     <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
                   </svg>
                 </a>
-                @if(true){
-                <a class="icon-list-filter-clear">
+                @if(nameNoFilter){
+                <a
+                  class="icon-list-filter-clear"
+                  (click)="onClearFilter('name')"
+                >
                   <svg>
                     <use
                       xlink:href="./assets/scss/icons.svg#icon-filter-clear"
@@ -41,7 +44,15 @@
                   (click)="$event.stopPropagation()"
                 >
                   <div class="filter-box-calendar">
-                    <input matInput [placeholder]="'Enter role name'" />
+                    <input
+                      matInput
+                      ngModelDebounce
+                      class="formcontrol"
+                      [placeholder]="'Enter role name'"
+                      [(ngModel)]="nameNoFilter"
+                      autocompleteOff="'off'"
+                      (ngModelDebounceChange)="nameFilter($event)"
+                    />
                   </div>
                   <div class="filter-box-dropdown">
                     <mat-form-field
@@ -51,7 +62,8 @@
                       <mat-select
                         placeholder="Select Filter"
                         panelClass="custom-select-panel-filter"
-                        [(ngModel)]="nameMatchMode"
+                        [(ngModel)]="nameNoFilter"
+                        (ngModelChange)="nameMatchModeChange()"
                       >
                         @for(item of filterDropDown; track $index){
                         <mat-option [value]="item.value">{{
@@ -69,7 +81,7 @@
           <td mat-cell *matCellDef="let data">
             <div class="custom-datatable-cont">
               <p>
-                <strong>{{ data.role_name }}</strong>
+                <strong>{{ data.name }}</strong>
               </p>
             </div>
           </td>
@@ -135,7 +147,7 @@
           <td mat-cell *matCellDef="let data">
             <div class="custom-datatable-cont">
               <p>
-                <strong>{{ data.number_of_employee }}</strong>
+                <strong>{{ data.numberOfEmployees }}</strong>
               </p>
             </div>
           </td>
@@ -211,6 +223,7 @@
                   class="edit"
                   matTooltip="Edit"
                   matTooltipClass="custom-list-tooltip"
+                  (click)="onAddEditSidebarOpen($event, 'edit', data)"
                 >
                   <svg>
                     <use xlink:href="./assets/scss/icons.svg#icon-edit"></use>
@@ -220,6 +233,7 @@
                   class="delete"
                   matTooltip="Delete"
                   matTooltipClass="custom-list-tooltip"
+                  (click)="onDeleteRoleDialog($event, data.id, data)"
                 >
                   <svg>
                     <use xlink:href="./assets/scss/icons.svg#icon-delete"></use>
@@ -265,12 +279,18 @@
         ></mat-footer-row>
       </table>
       <div class="paginator-block">
+        <!-- @if((roleList.length || 0) > pageSize){
         <mat-paginator
           appPagination
-          [length]="4"
+          showFirstLastButtons
+          [length]="roleList.length || 0"
           [pageSize]="pageSize"
           [hidePageSize]="true"
-        ></mat-paginator>
+          [pageIndex]="+pageNumber - 1"
+          (page)="onPageChange($event)"
+        >
+        </mat-paginator>
+        } -->
       </div>
     </div>
   </div>
@@ -286,7 +306,11 @@
   >
     @if (isAddEditRoleSidebarOpen()) {
     <section class="sidebar-content-wrapper">
-      <roles-sidebar-wrapper (closeSidebar)="onAddEditSidebarClose($event)" />
+      <roles-sidebar-wrapper
+        [pageType]="pageType()"
+        [selectedRole]="selectedRole()"
+        (closeSidebar)="onAddEditSidebarClose($event)"
+      />
     </section>
     }
   </mat-sidenav>
