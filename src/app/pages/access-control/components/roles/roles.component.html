@@ -8,6 +8,8 @@
         icon: 'icon-add-plus-filter'
       }"
       (open-sidebar)="onAddEditSidebarOpen($event, 'add', null)"
+      (onSearch)="onSearch($event)"
+      (onClickReset)="onClearSearch($event)"
     />
   </section>
   <div class="custom-page-wrapper">
@@ -26,7 +28,7 @@
                     <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
                   </svg>
                 </a>
-                @if(nameNoFilter){
+                @if(nameValue){
                 <a
                   class="icon-list-filter-clear"
                   (click)="onClearFilter('name')"
@@ -49,7 +51,7 @@
                       ngModelDebounce
                       class="formcontrol"
                       [placeholder]="'Enter role name'"
-                      [(ngModel)]="nameNoFilter"
+                      [(ngModel)]="nameValue"
                       autocompleteOff="'off'"
                       (ngModelDebounceChange)="nameFilter($event)"
                     />
@@ -62,7 +64,7 @@
                       <mat-select
                         placeholder="Select Filter"
                         panelClass="custom-select-panel-filter"
-                        [(ngModel)]="nameNoFilter"
+                        [(ngModel)]="nameMatchMode"
                         (ngModelChange)="nameMatchModeChange()"
                       >
                         @for(item of filterDropDown; track $index){
@@ -73,7 +75,6 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <button type="button" class="btn btn-primary">Apply</button>
                 </div>
               </mat-menu>
             </div>
@@ -99,8 +100,11 @@
                     <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
                   </svg>
                 </a>
-                @if (true) {
-                <a class="icon-list-filter-clear">
+                @if (employeeValue) {
+                <a
+                  class="icon-list-filter-clear"
+                  (click)="onClearFilter('employee')"
+                >
                   <svg>
                     <use
                       xlink:href="./assets/scss/icons.svg#icon-filter-clear"
@@ -117,8 +121,11 @@
                   <div class="filter-box-calendar">
                     <input
                       matInput
+                      ngModelDebounce
                       [placeholder]="'Enter No of Employee'"
-                      [(ngModel)]="noOfEmpFilterValue"
+                      [(ngModel)]="employeeValue"
+                      autocomplete="off"
+                      (ngModelDebounceChange)="employeeFilter($event)"
                     />
                   </div>
                   <div class="filter-box-dropdown">
@@ -129,7 +136,8 @@
                       <mat-select
                         placeholder="Select Filter"
                         panelClass="custom-select-panel-filter"
-                        [(ngModel)]="noOfEmpFilterMethod"
+                        [(ngModel)]="employeeMatchMode"
+                        (ngModelChange)="employeeMatchModeChange()"
                       >
                         @for(empFilter of noOfEmpFilterDropDown; track $index){
                         <mat-option [value]="empFilter.value">{{
@@ -139,7 +147,6 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <button type="button" class="btn btn-primary">Apply</button>
                 </div>
               </mat-menu>
             </div>
@@ -165,8 +172,11 @@
                     <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
                   </svg>
                 </a>
-                @if(true!==null){
-                <a class="icon-list-filter-clear">
+                @if(selectedStatusValue !== ''){
+                <a
+                  class="icon-list-filter-clear"
+                  (click)="onClearFilter('status')"
+                >
                   <svg>
                     <use
                       xlink:href="./assets/scss/icons.svg#icon-filter-clear"
@@ -186,7 +196,10 @@
                           [ngClass]="{
                             'status-badge-red': item.value === 0,
                             'status-badge-green': item.value === 1,
+                            'status-badge-red-focus': item.value === 0 && item.value === selectedStatusValue,
+                            'status-badge-green-focus': item.value === 1 && item.value === selectedStatusValue,
                           }"
+                          (click)="onSelectStatusFilters(item.value)"
                           >{{ item.label }}</a
                         >
                       </li>
@@ -279,18 +292,15 @@
         ></mat-footer-row>
       </table>
       <div class="paginator-block">
-        <!-- @if((roleList.length || 0) > pageSize){
         <mat-paginator
           appPagination
           showFirstLastButtons
-          [length]="roleList.length || 0"
+          [length]="(roleListCount$ | async) || 0"
           [pageSize]="pageSize"
           [hidePageSize]="true"
-          [pageIndex]="+pageNumber - 1"
           (page)="onPageChange($event)"
         >
         </mat-paginator>
-        } -->
       </div>
     </div>
   </div>

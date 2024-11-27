@@ -5,7 +5,7 @@ export const appSettings = {
   refreshTokenKey: 'state_project_refresh_token',
   otpCredential: 'state_project-otp-info',
   ajaxTimeout: 300000,
-  rowsPerPage: 3,
+  rowsPerPage: 5,
   accentedCharacters: 'áéíóúüâêôãõàèìòùçÀÁÂÃÉÊÍÓÔÕÚÜÇ',
   whitespacePattern: /^\S+?(?: \S+)*\s?$/,
   userManagementRollId: 1,
@@ -14,8 +14,8 @@ export const appSettings = {
   stringFilterDropDown: [
     { value: 'startsWith', label: 'Starts With' },
     { value: 'endsWith', label: 'Ends With' },
-    { value: 'contains', label: 'Contains' },
-    { value: 'notContains', label: 'Not Contains' },
+    { value: 'contain', label: 'Contain' },
+    { value: 'notContain', label: 'Not Contain' },
     { value: 'equals', label: 'Equals' },
     { value: 'notEquals', label: 'Not Equals' },
   ],
@@ -26,7 +26,7 @@ export const appSettings = {
     { value: 'dateIsAfter', label: 'Date is after' },
   ],
   numberFilterDropDown: [
-    { value: 'equals', label: 'Equals' },
-    { value: 'notEquals', label: 'Not Equals' },
+    { value: 'eq', label: 'Equals' },
+    { value: 'notEq', label: 'Not Equals' },
   ],
 };

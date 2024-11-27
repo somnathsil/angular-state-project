@@ -121,9 +121,9 @@ export class RolesAddEditComponent implements OnInit, OnDestroy {
         ...this.addEditRoleForm.value,
         number_of_employees: +this.addEditRoleForm.value.number_of_employees,
       };
-
-      // stop here if form is invalid
+      if (this.pageType() !== 'edit') delete formValue.id;
       if (this.addEditRoleForm.invalid) {
+        // stop here if form is invalid
         this.addEditRoleForm.markAllAsTouched();
         return true;
       }

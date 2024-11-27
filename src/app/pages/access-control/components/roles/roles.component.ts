@@ -1,6 +1,4 @@
 import {
-  AfterContentChecked,
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   effect,
@@ -36,7 +34,7 @@ import { AccessControlState, DeleteRole, FetchRoleList } from '@app/store';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Store } from '@ngxs/store';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 export interface ISupplierAuditTrialList {
   role_name: string;
@@ -60,45 +58,50 @@ export interface ISupplierAuditTrialList {
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss',
 })
-export class RolesComponent
-  implements OnInit, AfterViewInit, AfterContentChecked, OnDestroy
-{
+export class RolesComponent implements OnInit, OnDestroy {
   private _store = inject(Store);
   private _common = inject(CommonService);
   private _toastr = inject(ToastrService);
   private _dialog = inject(MatDialog);
   private _loadingBar = inject(LoadingBarService);
-  private paginators = inject(MatPaginatorIntl);
+  // private paginators = inject(MatPaginatorIntl);
 
   public pageType = signal<string>('');
   public selectedRole = signal<IRoleList | null>(null);
   public isAddEditRoleSidebarOpen = signal<boolean>(false);
-  rolesList: Signal<IRoleList[]> = this._store.selectSignal(
-    AccessControlState.roleList
-  );
 
-  // dataList$ = this._store.select(AccessControlState.roleList);
-
+  public count!: number;
   private first!: number;
-  public pageNumber!: string;
+  public pageNumber!: number;
   public pageSize = appSettings.rowsPerPage;
+
+  public nameValue = '';
+  public nameMatchMode = '';
+  public employeeValue = '';
+  public employeeMatchMode = '';
+  public selectedStatusValue: string | number = '';
   private searchModel: string | number = '';
 
   public dialogRef!: MatDialogRef<any>;
   private subscriptions: Subscription[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  public nameMatchMode: string = 'startsWith';
-  public nameNoFilter: string = '';
-  public noOfEmpFilterValue: string = '';
-  public noOfEmpFilterMethod: string = 'equals';
+
   public filterDropDown: { value: string; label: string }[] =
     appSettings.stringFilterDropDown;
   public noOfEmpFilterDropDown: { value: string; label: string }[] =
     appSettings.numberFilterDropDown;
 
-  // public roleList: IRoleList[] = [];
-  // dataList = new MatTableDataSource(this.rolesList());
-  public dataList!: MatTableDataSource<IRoleList, MatPaginator>;
+  public roleList: IRoleList[] = [];
+  public dataList = new MatTableDataSource<IRoleList, MatPaginator>([]);
+  roleList$: Observable<IRoleList[]> = this._store.select(
+    AccessControlState.roleList
+  );
+  roleListCount$: Observable<number> = this._store.select(
+    AccessControlState.roleListCount
+  );
+  // rolesList: Signal<IRoleList[]> = this._store.selectSignal(
+  //   AccessControlState.roleList
+  // );
 
   public statusFilterArr: { value: number; label: string }[] = [
     { value: 1, label: 'Active' },
@@ -112,45 +115,66 @@ export class RolesComponent
   ];
 
   constructor(private cdr: ChangeDetectorRef) {
-    effect(() => {
-      // this.roleList = this.rolesList();
-      this.dataList = new MatTableDataSource(this.rolesList());
-    });
+    // effect(() => {
+    //   // this.roleList = this.rolesList();
+    //   this.dataList = new MatTableDataSource(this.rolesList());
+    // });
   }
 
   ngOnInit(): void {
-    this.loadRoleList(0, '');
+    this.loadRoleList(1, '');
   }
 
-  ngAfterViewInit() {
-    // this.dataList.paginator = this.paginator;
-    // this.cdr.detectChanges();
+  getDataFromStore() {
+    this.subscriptions.push(
+      this.roleList$.subscribe((data) => {
+        if (data) {
+          this.roleList = data;
+          this.dataList = new MatTableDataSource(this.roleList);
+          // this.dataList.paginator = this.paginator;
+          // if (this.dataList.paginator) {
+          //   this.paginator.pageIndex = 0;
+          // }
+        }
+      }),
+      this.roleListCount$.subscribe((data) => {
+        this.count = data;
+      })
+    );
   }
 
-  ngAfterContentChecked(): void {
-    this.cdr.detectChanges();
-  }
-
-  loadRoleList(first: number, searchModel: any) {
+  loadRoleList(pageNumber: number, searchModel: any) {
     const param: any = {
-      first: 1,
-      rows: 25,
-      // filters: {
-      //   name: {
-      //     matchMode: this.nameMatchMode ? this.nameMatchMode : 'startsWith',
-      //     value: this.nameNoFilter ? this.nameNoFilter : '',
-      //   },
-      // },
-      // globalFilter: searchModel ? searchModel : '',
+      first: pageNumber,
+      rows: this.pageSize,
+      filters: {
+        name: {
+          matchMode: this.nameMatchMode ? this.nameMatchMode : 'startsWith',
+          value: this.nameValue ? this.nameValue : '',
+        },
+        number_of_employees: {
+          matchMode: this.employeeMatchMode ? this.employeeMatchMode : 'eq',
+          value: this.employeeValue ? this.employeeValue : '',
+        },
+        status: {
+          matchMode: 'eq',
+          value:
+            this.selectedStatusValue !== undefined
+              ? this.selectedStatusValue
+              : '',
+        },
+      },
+      globalFilter: searchModel ? searchModel : '',
     };
     this._loadingBar.useRef().start();
     this.subscriptions.push(
       this._store.dispatch(new FetchRoleList(param)).subscribe({
-        next: (apiResult) => {
-          this._loadingBar.useRef().complete();
-          this._common.setLoadingStatus(false);
-          // this.roleList = this.rolesList();
-          // this.dataList = new MatTableDataSource(this.roleList);
+        next: () => {
+          setTimeout(() => {
+            this._loadingBar.useRef().complete();
+            this.getDataFromStore();
+            this._common.setLoadingStatus(false);
+          }, 50);
         },
         error: (apiError) => {
           this._common.setLoadingStatus(false);
@@ -212,34 +236,76 @@ export class RolesComponent
   }
 
   onPageChange(e: PageEvent) {
-    this.first = e.pageSize * e.pageIndex;
+    // this.first = e.pageSize * e.pageIndex;
+    // this.pageNumber = (e.pageIndex + 1).toString();
+    this.pageNumber = e.pageIndex + 1;
     this.pageSize = e.pageSize;
-    this.pageNumber = (e.pageIndex + 1).toString();
-    this.loadRoleList(this.first, this.searchModel);
+    this.loadRoleList(this.pageNumber, this.searchModel);
   }
 
   nameFilter(value: any) {
-    this.first = 0;
-    this.nameNoFilter = value;
-    this.loadRoleList(this.first, this.searchModel);
+    this.pageNumber = 1;
+    this.nameValue = value;
+    this.loadRoleList(this.pageNumber, this.searchModel);
   }
 
   nameMatchModeChange() {
-    if (this.nameNoFilter) {
-      this.first = 0;
-      this.loadRoleList(this.first, this.searchModel);
+    if (this.nameValue) {
+      this.pageNumber = 1;
+      this.loadRoleList(this.pageNumber, this.searchModel);
     }
   }
 
-  onClearFilter(filterType: 'name') {
-    this.first = 0;
+  employeeFilter(value: any) {
+    this.pageNumber = 1;
+    this.employeeValue = value;
+    this.loadRoleList(this.pageNumber, this.searchModel);
+  }
+
+  employeeMatchModeChange() {
+    if (this.employeeValue) {
+      this.pageNumber = 1;
+      this.loadRoleList(this.pageNumber, this.searchModel);
+    }
+  }
+
+  onSelectStatusFilters(value: string | number) {
+    this.selectedStatusValue = value;
+    this.pageNumber = 1;
+    this.loadRoleList(this.pageNumber, this.searchModel);
+  }
+
+  onClearFilter(filterType: 'name' | 'status' | 'employee') {
+    this.pageNumber = 1;
     switch (filterType) {
       case 'name':
-        this.nameNoFilter = '';
-        this.nameMatchMode = 'startsWith';
+        this.nameValue = '';
+        this.nameMatchMode = '';
+        break;
+      case 'status':
+        this.selectedStatusValue = '';
+        break;
+      case 'employee':
+        this.employeeValue = '';
+        this.employeeMatchMode = '';
         break;
     }
-    this.loadRoleList(this.first, this.searchModel);
+    this.loadRoleList(this.pageNumber, this.searchModel);
+  }
+
+  onSearch(searchValue: string | number) {
+    this.pageNumber = 1;
+    this.searchModel = searchValue;
+    this.loadRoleList(this.pageNumber, this.searchModel);
+  }
+
+  onClearSearch(event: Event) {
+    this.searchModel = '';
+    this.nameValue = '';
+    this.nameMatchMode = '';
+    this.selectedStatusValue = '';
+    this.employeeValue = '';
+    this.employeeMatchMode = '';
   }
 
   /* Open roles sidebar */

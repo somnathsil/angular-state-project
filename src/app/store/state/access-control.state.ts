@@ -37,6 +37,11 @@ export class AccessControlState {
     return state.roleList;
   }
 
+  @Selector()
+  static roleListCount(state: IAccessControlModel) {
+    return state.roleListCount;
+  }
+
   @Action(FetchRoleList)
   FetchRoleList(
     ctx: StateContext<IAccessControlModel>,
@@ -80,8 +85,9 @@ export class AccessControlState {
       tap((apiResult) => {
         const state = ctx.getState();
         const roleTypeListCount = state.roleListCount;
+        const roleTypeID = apiResult.response.dataset.id;
         let addedItem: IRoleList = {
-          id: apiResult.response.dataset.id,
+          id: roleTypeID,
           name: param.name,
           status: param.status,
           numberOfEmployees: param.number_of_employees,
