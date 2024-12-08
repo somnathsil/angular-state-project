@@ -12,6 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 import { appSettings } from '@app/configs';
 import { AuthenticationService } from '@app/core/authentication';
 import { HttpService } from '@app/core/http';
+import { CommonService } from '@app/core/services';
 import { fadeAnimation } from '@app/shared/animations';
 import { passwordValidator } from '@app/shared/validators';
 import { LoadingBarService } from '@ngx-loading-bar/core';
@@ -29,8 +30,9 @@ import { Subscription } from 'rxjs';
 export class RegistrationComponent implements OnInit {
   private _router = inject(Router);
   private _http = inject(HttpService);
-  private _toastr = inject(ToastrService);
+  private _common = inject(CommonService);
   private _formBuilder = inject(FormBuilder);
+  private _toastr = inject(ToastrService);
   private _loader = inject(LoadingBarService);
   private _authService = inject(AuthenticationService);
 
@@ -46,6 +48,7 @@ export class RegistrationComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this._common.setLoadingStatus(false);
     this.initRegistrationForm();
   }
 
@@ -131,6 +134,7 @@ export class RegistrationComponent implements OnInit {
             console.log(apiResult);
             this.submitted.set(false);
             this.isDisabled.set(false);
+
             this._loader.useRef().complete();
             this._toastr.success('Success', apiResult.response.status.message, {
               closeButton: true,

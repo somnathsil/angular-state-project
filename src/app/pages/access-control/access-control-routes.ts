@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { RolesComponent } from './components/roles/roles.component';
-import { DepartmentComponent } from './components/department/department.component';
+import { RolesComponent } from './components';
+import { DepartmentComponent } from './components';
 
 export const accessControlRoutes: Routes = [
   {

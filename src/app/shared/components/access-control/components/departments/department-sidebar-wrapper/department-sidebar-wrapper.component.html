@@ -9,13 +9,15 @@
   <div class="sidebar-content-full-block">
     <header class="sidebar-content-top">
       <article class="sidebar-content-top-left">
-        <h4>Add Department</h4>
+        <h4>{{ pageType() === "edit" ? "Edit" : "Add" }} Department</h4>
       </article>
     </header>
     <div class="sidebar-content-bot">
       <div class="sidebar-body-wrapper !bg-transparent">
         <div class="sidebar-tabs-area">
           <department-add-edit
+            [pageType]="pageType()"
+            [selectedDepartment]="selectedDepartment()"
             (closeSidebar)="onCloseSidebar($event)"
           ></department-add-edit>
         </div>

@@ -1,24 +1,19 @@
 <main class="global-wrapper">
   <section class="global-filter">
     <list-filter
-      [page-title]="'Department'"
+      [page-title]="'User Management'"
       [search-placeholder]="'Search'"
-      [primary-add-button]="{
-        label: 'Add Department',
-        icon: 'icon-add-plus-filter'
-      }"
-      (open-sidebar)="onAddEditSidebarOpen($event, 'add', null)"
       (onSearch)="onSearch($event)"
       (onClickReset)="onClearSearch($event)"
     />
   </section>
   <div class="custom-page-wrapper">
-    <div class="department-list-table">
+    <div class="role-list-table">
       <table class="mat-table" mat-table [dataSource]="dataList">
-        <ng-container matColumnDef="department_name">
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>
             <div class="custom-datatable-header">
-              <p>Department Name</p>
+              <p>Name</p>
               <div class="sortable-header-right">
                 <a
                   class="icon-list-filter"
@@ -50,9 +45,9 @@
                       matInput
                       ngModelDebounce
                       class="formcontrol"
-                      [placeholder]="'Enter department name'"
-                      [(ngModel)]="nameValue"
+                      [placeholder]="'Enter user name'"
                       autocompleteOff="'off'"
+                      [(ngModel)]="nameValue"
                       (ngModelDebounceChange)="nameFilter($event)"
                     />
                   </div>
@@ -87,10 +82,10 @@
             </div>
           </td>
         </ng-container>
-        <ng-container matColumnDef="number_of_employee">
+        <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef>
             <div class="custom-datatable-header">
-              <p>No. of Employee</p>
+              <p>Email</p>
               <div class="sortable-header-right">
                 <a
                   class="icon-list-filter"
@@ -100,18 +95,17 @@
                     <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
                   </svg>
                 </a>
-                @if (employeeValue) {
+                @if(emailValue){
                 <a
                   class="icon-list-filter-clear"
-                  (click)="onClearFilter('employee')"
+                  (click)="onClearFilter('email')"
                 >
                   <svg>
                     <use
                       xlink:href="./assets/scss/icons.svg#icon-filter-clear"
                     ></use>
-                  </svg>
-                </a>
-                }
+                  </svg> </a
+                >}
               </div>
               <mat-menu #filterDropdown class="filter-inner-block">
                 <div
@@ -122,10 +116,11 @@
                     <input
                       matInput
                       ngModelDebounce
-                      [placeholder]="'Enter No of Employee'"
-                      [(ngModel)]="employeeValue"
-                      autocomplete="off"
-                      (ngModelDebounceChange)="employeeFilter($event)"
+                      class="formcontrol"
+                      [placeholder]="'Enter user name'"
+                      autocompleteOff="'off'"
+                      [(ngModel)]="emailValue"
+                      (ngModelDebounceChange)="emailFilter($event)"
                     />
                   </div>
                   <div class="filter-box-dropdown">
@@ -136,12 +131,12 @@
                       <mat-select
                         placeholder="Select Filter"
                         panelClass="custom-select-panel-filter"
-                        [(ngModel)]="employeeMatchMode"
-                        (ngModelChange)="employeeMatchModeChange()"
+                        [(ngModel)]="emailMatchMode"
+                        (ngModelChange)="emailMatchModeChange()"
                       >
-                        @for(empFilter of noOfEmpFilterDropDown; track $index){
-                        <mat-option [value]="empFilter.value">{{
-                          empFilter.label
+                        @for(item of filterDropDown; track $index){
+                        <mat-option [value]="item.value">{{
+                          item.label
                         }}</mat-option>
                         }
                       </mat-select>
@@ -154,105 +149,24 @@
           <td mat-cell *matCellDef="let data">
             <div class="custom-datatable-cont">
               <p>
-                <strong>{{ data.numberOfEmployees }}</strong>
+                <strong>{{ data.email }}</strong>
               </p>
             </div>
           </td>
         </ng-container>
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="created_at">
           <th mat-header-cell *matHeaderCellDef>
             <div class="custom-datatable-header">
-              <p>Status</p>
-              <div class="sortable-header-right">
-                <a
-                  class="icon-list-filter"
-                  [matMenuTriggerFor]="filterDropdown"
-                >
-                  <svg>
-                    <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
-                  </svg>
-                </a>
-                @if(selectedStatusValue !== ''){
-                <a
-                  class="icon-list-filter-clear"
-                  (click)="onClearFilter('status')"
-                >
-                  <svg>
-                    <use
-                      xlink:href="./assets/scss/icons.svg#icon-filter-clear"
-                    ></use>
-                  </svg>
-                </a>
-                }
-              </div>
-              <mat-menu #filterDropdown class="filter-inner-block">
-                <div class="global-filter-area">
-                  <div class="filter-box-status">
-                    <ul>
-                      @for(item of statusFilterArr; track item;let i = $index){
-                      <li>
-                        <a
-                          class="status-badge"
-                          [ngClass]="{
-                            'status-badge-red': item.value === 0,
-                            'status-badge-green': item.value === 1,
-                            'status-badge-red-focus': item.value === 0 && item.value === selectedStatusValue,
-                            'status-badge-green-focus': item.value === 1 && item.value === selectedStatusValue,
-                          }"
-                          (click)="onSelectStatusFilters(item.value)"
-                          >{{ item.label }}</a
-                        >
-                      </li>
-                      }
-                    </ul>
-                  </div>
-                </div>
-              </mat-menu>
+              <p>Created At</p>
             </div>
           </th>
           <td mat-cell *matCellDef="let data">
             <div class="custom-datatable-cont">
-              <div
-                class="status-box-small"
-                [ngClass]="{
-                  'status-red': data.status === 0,
-                  'status-green': data.status === 1
-                }"
-              ></div>
-              <p>{{ data.status === 1 ? "Active" : "Inactive" }}</p>
-            </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>
-            <div class="custom-datatable-header">
-              <p>&nbsp;</p>
-            </div>
-          </th>
-          <td mat-cell *matCellDef="let data">
-            <div class="custom-datatable-cont">
-              <div class="action-block">
-                <a
-                  class="edit"
-                  matTooltip="Edit"
-                  matTooltipClass="custom-list-tooltip"
-                  (click)="onAddEditSidebarOpen($event, 'edit', data)"
-                >
-                  <svg>
-                    <use xlink:href="./assets/scss/icons.svg#icon-edit"></use>
-                  </svg>
-                </a>
-                <a
-                  class="delete"
-                  matTooltip="Delete"
-                  matTooltipClass="custom-list-tooltip"
-                  (click)="onDeleteDepartmentDialog($event, data.id, data)"
-                >
-                  <svg>
-                    <use xlink:href="./assets/scss/icons.svg#icon-delete"></use>
-                  </svg>
-                </a>
-              </div>
+              <p>
+                <strong>{{
+                  data.createdAt | date : "yyyy-MM-dd (h:mm a)"
+                }}</strong>
+              </p>
             </div>
           </td>
         </ng-container>
@@ -294,7 +208,7 @@
         <mat-paginator
           appPagination
           showFirstLastButtons
-          [length]="(departmentListCount$ | async) || 0"
+          [length]="(userManagementListCount$ | async) || 0"
           [pageSize]="pageSize"
           [hidePageSize]="true"
           (page)="onPageChange($event)"
@@ -304,23 +218,3 @@
     </div>
   </div>
 </main>
-
-<!-- Add Department Sidebar -->
-<mat-sidenav-container [hasBackdrop]="true" fullscreen>
-  <mat-sidenav
-    position="end"
-    [disableClose]="true"
-    class="custom-sidebar custom-sidebar-small"
-    [(opened)]="isAddEditDepartmentSidebarOpen"
-  >
-    @if (isAddEditDepartmentSidebarOpen()) {
-    <section class="sidebar-content-wrapper">
-      <department-sidebar-wrapper
-        [pageType]="pageType()"
-        [selectedDepartment]="selectedDepartment()"
-        (closeSidebar)="onAddEditSidebarClose($event)"
-      />
-    </section>
-    }
-  </mat-sidenav>
-</mat-sidenav-container>

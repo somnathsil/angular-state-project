@@ -15,8 +15,9 @@ import { AccessControlState } from './store';
 import { provideStore } from '@ngxs/store';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { userManagementState } from './store/state/user-management.state';
 
-const STATES: any = [AccessControlState];
+const STATES: any = [AccessControlState, userManagementState];
 
 export const appConfig: ApplicationConfig = {
   providers: [

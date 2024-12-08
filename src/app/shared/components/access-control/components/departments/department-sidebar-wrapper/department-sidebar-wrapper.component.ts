@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { DepartmentAddEditComponent } from '../department-add-edit/department-add-edit.component';
 import { angularModule } from '@app/core/modules';
 
@@ -10,6 +10,8 @@ import { angularModule } from '@app/core/modules';
   styleUrl: './department-sidebar-wrapper.component.scss',
 })
 export class DepartmentSidebarWrapperComponent {
+  public pageType = input<string>();
+  public selectedDepartment = input<IDepartmentList | null>();
   closeSidebar = output<Event>({ alias: 'closeSidebar' });
 
   onCloseSidebar(event: Event) {

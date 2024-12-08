@@ -114,7 +114,7 @@ export class RolesComponent implements OnInit, OnDestroy {
     'action',
   ];
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor() {
     // effect(() => {
     //   // this.roleList = this.rolesList();
     //   this.dataList = new MatTableDataSource(this.rolesList());
@@ -133,7 +133,7 @@ export class RolesComponent implements OnInit, OnDestroy {
           this.dataList = new MatTableDataSource(this.roleList);
           // this.dataList.paginator = this.paginator;
           // if (this.dataList.paginator) {
-          //   this.paginator.pageIndex = 0;
+          //   this.paginator.pageIndex = 1;
           // }
         }
       }),
@@ -144,7 +144,7 @@ export class RolesComponent implements OnInit, OnDestroy {
   }
 
   loadRoleList(pageNumber: number, searchModel: any) {
-    const param: any = {
+    const param: IRoleListParam = {
       first: pageNumber,
       rows: this.pageSize,
       filters: {

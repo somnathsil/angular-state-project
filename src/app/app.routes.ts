@@ -29,6 +29,13 @@ export const routes: Routes = [
             (m) => m.accessControlRoutes
           ),
       },
+      {
+        path: 'user-management',
+        loadChildren: () =>
+          import('./pages/user-management/user-management.routes').then(
+            (m) => m.userManagementRoutes
+          ),
+      },
     ],
   },
 ];

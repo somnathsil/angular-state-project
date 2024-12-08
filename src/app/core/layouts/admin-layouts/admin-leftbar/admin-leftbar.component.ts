@@ -53,7 +53,7 @@ export class AdminLeftbarComponent implements OnInit, OnDestroy {
       },
       {
         id: '1',
-        label: 'user management ',
+        label: 'user management',
         icon: './assets/scss/icons.svg#icon-user-management',
         isActive: false,
         URl: '/user-management',

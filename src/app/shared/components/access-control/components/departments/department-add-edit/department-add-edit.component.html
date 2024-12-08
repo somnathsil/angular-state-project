@@ -13,7 +13,7 @@
             <div
               class="formcontrol-wrapper"
               [ngClass]="{
-                'invalid-control': hasFormControlError('dept_name')
+                'invalid-control': hasFormControlError('name')
               }"
             >
               <input
@@ -21,15 +21,15 @@
                 autocomplete="off"
                 class="formcontrol"
                 placeholder="Enter Department Name"
-                formControlName="dept_name"
+                formControlName="name"
               />
             </div>
-            @if(hasFormControlError('dept_name')){
-            @if(formControl()['dept_name'].hasError('required')){
+            @if(hasFormControlError('name')){
+            @if(formControl()['name'].hasError('required')){
             <div [@fadeAnimation] class="error-message">
               <p>Please enter department name</p>
             </div>
-            } @if(formControl()['dept_name'].hasError('pattern')){
+            } @if(formControl()['name'].hasError('pattern')){
             <div [@fadeAnimation] class="error-message">
               <p>Please enter valid department name</p>
             </div>
@@ -46,7 +46,7 @@
             <div
               class="formcontrol-wrapper"
               [ngClass]="{
-                'invalid-control': hasFormControlError('employee_no')
+                'invalid-control': hasFormControlError('number_of_employees')
               }"
             >
               <input
@@ -54,15 +54,15 @@
                 autocomplete="off"
                 class="formcontrol"
                 placeholder="Enter Number of Employee"
-                formControlName="employee_no"
+                formControlName="number_of_employees"
               />
             </div>
-            @if(hasFormControlError('employee_no')) {
-            @if(formControl()['employee_no'].hasError('required')){
+            @if(hasFormControlError('number_of_employees')) {
+            @if(formControl()['number_of_employees'].hasError('required')){
             <div [@fadeAnimation] class="error-message">
               <p>Please enter employee number</p>
             </div>
-            } @if(formControl()['employee_no'].hasError('pattern')){
+            } @if(formControl()['number_of_employees'].hasError('pattern')){
             <div [@fadeAnimation] class="error-message">
               <p>Please enter valid employee number</p>
             </div>
