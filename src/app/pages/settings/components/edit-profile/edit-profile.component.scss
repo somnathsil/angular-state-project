@@ -1,0 +1,95 @@
+@import "partials";
+
+.global-filter ::ng-deep {
+  .filter-wrapper {
+    @apply px-[52px];
+    @apply h-[106px];
+    @apply mb-0;
+    @apply z-1;
+  }
+  .filter-rightside {
+    @apply hidden;
+  }
+}
+
+.content-container {
+  @apply relative;
+  @apply px-[46px] py-14;
+  @apply min-h-[calc(100vh-194px)];
+  @apply bg-white;
+  @include flex-all(flex, flex-start);
+  @apply gap-x-[88px];
+  &::after {
+    @apply empty-content;
+    @apply w-[314px];
+    @apply h-[402px];
+    @apply absolute;
+    @apply bottom-0;
+    @apply right-0;
+    @include background-image("globe-big.png", no-repeat, $size: cover);
+  }
+}
+.left-block {
+  @apply w-[132px];
+  @apply relative;
+  @apply z-1;
+  .user-image {
+    @apply w-[132px];
+    @apply h-[128px];
+    @include rounded(20);
+    @apply border-[6px] border-solid border-blue-200;
+    @apply mb-3;
+    @apply overflow-hidden;
+    img {
+      @apply w-full;
+      @apply h-full;
+      @apply object-cover;
+      @apply object-top;
+    }
+  }
+  .button-group {
+    @include flex-all(flex, center, center);
+    @apply gap-1.5;
+  }
+  a.btn,
+  label.btn {
+    @apply border-none;
+    @apply text-white;
+    @apply h-fit;
+    @apply min-w-0;
+    @apply px-2;
+    @apply py-1.5;
+    @apply text-xs;
+    @apply leading-none;
+    @apply font-normal;
+    &.change-btn {
+      @apply bg-black;
+      &:hover {
+        @apply bg-primary;
+      }
+    }
+    &.delete-btn {
+      @apply bg-red-100;
+      &:hover {
+        @apply bg-red;
+      }
+    }
+  }
+}
+.right-block {
+  @apply w-[calc(100%-220px)];
+  @apply relative;
+  @apply z-1;
+  .form-group {
+    @apply pb-7;
+    @apply max-w-[428px];
+  }
+
+  .custom-form-buttons-block {
+    @apply mt-16;
+  }
+}
+.formcontrol:disabled {
+  @apply bg-[#ddd];
+  @apply cursor-not-allowed;
+}

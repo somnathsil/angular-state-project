@@ -115,7 +115,7 @@ export class AdminLeftbarComponent implements OnInit, OnDestroy {
           {
             id: '14',
             label: 'Policy',
-            URl: '/settings/policy',
+            URl: '/policy',
             isActive: false,
             isSubMenuOpen: false,
             subMenus: [],

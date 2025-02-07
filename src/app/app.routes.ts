@@ -36,6 +36,18 @@ export const routes: Routes = [
             (m) => m.userManagementRoutes
           ),
       },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./pages/settings/settings.route').then(
+            (m) => m.settingtRoutes
+          ),
+      },
+      {
+        path: 'policy',
+        loadChildren: () =>
+          import('./pages/policy/policy.routes').then((m) => m.policyRoutes),
+      },
     ],
   },
 ];

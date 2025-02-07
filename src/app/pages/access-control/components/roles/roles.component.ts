@@ -36,11 +36,11 @@ import { Store } from '@ngxs/store';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 
-export interface ISupplierAuditTrialList {
-  role_name: string;
-  number_of_employee: number;
-  status: number;
-}
+// export interface ISupplierAuditTrialList {
+//   role_name: string;
+//   number_of_employee: number;
+//   status: number;
+// }
 
 @Component({
   selector: 'app-roles',

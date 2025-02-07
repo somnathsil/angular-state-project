@@ -1,0 +1,116 @@
+<main class="global-wrapper">
+  <section class="global-filter">
+    <list-filter [page-title]="'Profile information'" />
+  </section>
+  <section class="content-container">
+    <div class="left-block">
+      <div
+        class="user-image"
+        [ngClass]="{
+          'invalid-control': hasFormControlError('profile_image')
+        }"
+      >
+        <img
+          [src]="imageFlag ? proImage : proImage"
+          alt="Profile Image"
+          width="122"
+          height="118"
+          decoding="async"
+          loading="lazy"
+        />
+      </div>
+      <input
+        type="file"
+        id="photo"
+        [hidden]="true"
+        (change)="onLocalFileSelect($event)"
+        #file
+        accept=".jpg, .jpeg, .png,.webp"
+      />
+
+      <div class="button-group">
+        <label for="photo" class="btn change-btn">Change</label>
+        <!-- <a class="btn delete-btn">Delete</a> -->
+      </div>
+    </div>
+    <div class="right-block">
+      <form [formGroup]="editProfileForm" (ngSubmit)="editProfileFormSubmit()">
+        <div class="form-group">
+          <label>Name<sup>*</sup></label>
+          <div
+            class="formcontrol-wrapper"
+            [ngClass]="{
+              'invalid-control': hasFormControlError('name')
+            }"
+          >
+            <input
+              type="text"
+              autocomplete="off"
+              class="formcontrol"
+              placeholder="Enter Name"
+              formControlName="name"
+            />
+          </div>
+          @if(hasFormControlError('name')){
+          @if(formControl['name'].hasError('required')) {
+          <div [@fadeAnimation] class="error-message">
+            <p>Please enter name</p>
+          </div>
+          } @if(formControl['name'].hasError('pattern')){
+          <div [@fadeAnimation] class="error-message">
+            <p>Please enter valid name</p>
+          </div>
+          } @if(formControl['name'].hasError('maxlength')){
+          <div [@fadeAnimation] class="error-message">
+            <p>Name can not exceed more than 200 character</p>
+          </div>
+          }}
+        </div>
+        <div class="form-group">
+          <label>Phone<sup>*</sup></label>
+          <div
+            class="formcontrol-wrapper"
+            [ngClass]="{
+              'invalid-control': hasFormControlError('phone_number')
+            }"
+          >
+            <input
+              type="text"
+              autocomplete="off"
+              class="formcontrol"
+              placeholder="Enter Phone"
+              formControlName="phone_number"
+            />
+          </div>
+          @if(hasFormControlError('phone_number')){
+          @if(formControl['phone_number'].hasError('required')) {
+          <div [@fadeAnimation] class="error-message">
+            <p>Please enter phone number</p>
+          </div>
+          } }
+        </div>
+        <div class="form-group">
+          <label>Email<sup>*</sup></label>
+          <div
+            class="formcontrol-wrapper"
+            [ngClass]="{
+              'invalid-control': hasFormControlError('email')
+            }"
+          >
+            <input
+              type="email"
+              autocomplete="off"
+              class="formcontrol"
+              placeholder="Enter Email"
+              formControlName="email"
+            />
+          </div>
+        </div>
+        <div class="custom-form-buttons-block">
+          <button type="button" class="btn btn-primary-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
