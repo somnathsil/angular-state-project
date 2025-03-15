@@ -11,7 +11,7 @@ import { angularModule } from '@app/core/modules';
 import { CommonService } from '@app/core/services';
 import { fadeAnimation } from '@app/shared/animations';
 import { ListFilterComponent } from '@app/shared/components/list-filter/list-filter.component';
-import { passwordValidator } from '@app/shared/validators';
+import { PasswordPattern, passwordValidator } from '@app/shared/validators';
 import { ChangePassword } from '@app/store/actions/profile.action';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { Store } from '@ngxs/store';
@@ -31,6 +31,8 @@ export class ChangePasswordComponent implements OnInit {
   public showTypeConfirm = signal<boolean>(false);
   public showTypeOld = signal<boolean>(false);
   public submitted = signal<boolean>(false);
+  public newPasswordContainErrors = signal<boolean>(false);
+
   public changePasswordForm!: FormGroup;
   public subscriptions: Subscription[] = [];
 
@@ -51,7 +53,10 @@ export class ChangePasswordComponent implements OnInit {
     this.changePasswordForm = this.formBuilder.group(
       {
         oldPassword: new FormControl('', [Validators.required]),
-        newPassword: new FormControl('', [Validators.required]),
+        newPassword: new FormControl('', [
+          Validators.required,
+          PasswordPattern.passwordValidation(),
+        ]),
         confirmPassword: new FormControl('', [Validators.required]),
       },
       {
@@ -120,6 +125,20 @@ export class ChangePasswordComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  get newPasswordValidationCheck() {
+    return (
+      this.formControl['newPassword'].errors?.['upperCase'] ||
+      this.formControl['newPassword'].errors?.['lowerCase'] ||
+      this.formControl['newPassword'].errors?.['specialCharacter'] ||
+      this.formControl['newPassword'].errors?.['number'] ||
+      this.formControl['newPassword'].errors?.['length']
+    );
+  }
+
+  OnClickNewPassword() {
+    this.newPasswordContainErrors.set(true);
   }
 
   ngOnDestroy(): void {

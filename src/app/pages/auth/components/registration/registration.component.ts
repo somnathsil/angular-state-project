@@ -14,7 +14,7 @@ import { AuthenticationService } from '@app/core/authentication';
 import { HttpService } from '@app/core/http';
 import { CommonService } from '@app/core/services';
 import { fadeAnimation } from '@app/shared/animations';
-import { passwordValidator } from '@app/shared/validators';
+import { PasswordPattern, passwordValidator } from '@app/shared/validators';
 import { LoadingBarService } from '@ngx-loading-bar/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -40,6 +40,7 @@ export class RegistrationComponent implements OnInit {
   public isDisabled = signal<boolean>(false);
   public showTypePassword = signal<boolean>(false);
   public showTypeConfirmPassword = signal<boolean>(false);
+  public newPasswordContainErrors = signal<boolean>(false);
   public emailValidator = signal(appSettings.emailPattern);
 
   public registrationForm!: FormGroup;
@@ -74,11 +75,14 @@ export class RegistrationComponent implements OnInit {
         }),
         new_password: new FormControl('', {
           nonNullable: true,
-          validators: [Validators.required, Validators.minLength(6)],
+          validators: [
+            Validators.required,
+            PasswordPattern.passwordValidation(),
+          ],
         }),
         con_password: new FormControl('', {
           nonNullable: true,
-          validators: [Validators.required, Validators.minLength(6)],
+          validators: [Validators.required],
         }),
         terms: [false, Validators.requiredTrue],
       },
@@ -179,6 +183,20 @@ export class RegistrationComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  get newPasswordValidationCheck() {
+    return (
+      this.formControl()['new_password'].errors?.['upperCase'] ||
+      this.formControl()['new_password'].errors?.['lowerCase'] ||
+      this.formControl()['new_password'].errors?.['specialCharacter'] ||
+      this.formControl()['new_password'].errors?.['number'] ||
+      this.formControl()['new_password'].errors?.['length']
+    );
+  }
+
+  OnClickNewPassword() {
+    this.newPasswordContainErrors.set(true);
   }
 
   ngOnDestroy(): void {

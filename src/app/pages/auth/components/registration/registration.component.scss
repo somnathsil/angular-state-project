@@ -172,3 +172,41 @@
     }
   }
 }
+
+.error-block {
+  @apply w-full;
+  @apply absolute;
+  @apply -top-[156px];
+  @applt right-0;
+  @apply left-0;
+  @apply bg-white;
+  @apply py-2 px-2.5;
+  @apply rounded-md;
+  @apply border border-solid border-primary;
+  &:before {
+    @apply empty-content;
+    @apply block;
+    @apply absolute;
+    @apply left-1/2;
+    @apply -bottom-5;
+    @apply w-0;
+    @apply w-0;
+    transform: translateX(-50%) rotate(180deg);
+    border-bottom: 10px solid #4ec4cc;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+  }
+  .error-item {
+    @include flex-all(flex, center);
+    @apply gap-x-2;
+    @apply mb-1;
+    p.text-valid {
+      @apply text-[#01d468];
+    }
+    img {
+      @apply w-4;
+      @apply h-4;
+    }
+  }
+}

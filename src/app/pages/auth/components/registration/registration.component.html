@@ -65,6 +65,7 @@
           class="auth-formcontrol"
           placeholder="Password"
           autocomplete="off"
+          (focus)="OnClickNewPassword()"
           formControlName="new_password"
         />
         <a class="icon-block" (click)="showIconType(0)">
@@ -84,11 +85,90 @@
       <div [@fadeAnimation] class="auth-error-message">
         <p>Please enter your password</p>
       </div>
-      } @if(formControl()['new_password'].hasError('minlength')) {
-      <div [@fadeAnimation] class="auth-error-message">
-        <p>Password minimum 6 characters</p>
+      } } @if(newPasswordContainErrors() && newPasswordValidationCheck){ @if
+      (formControl()['new_password'].hasError('upperCase') ||
+      formControl()['new_password'].hasError('lowerCase') ||
+      formControl()['new_password'].hasError('specialCharacter') ||
+      formControl()['new_password'].hasError('number') ||
+      formControl()['new_password'].hasError('length')) {
+      <div class="error-block">
+        <div class="error-item">
+          <a class="check-icon">
+            <img
+              [src]="!formControl()['new_password'].errors?.['upperCase']? './assets/images/verify-account.svg' : './assets/images/not-verify-account.svg'"
+              alt=""
+            />
+          </a>
+          <div [@fadeAnimation]>
+            <p
+              [class.text-valid]="!formControl()['new_password'].errors?.['upperCase']"
+            >
+              Please enter at least one capital letter
+            </p>
+          </div>
+        </div>
+        <div class="error-item">
+          <a class="check-icon">
+            <img
+              [src]="!formControl()['new_password'].errors?.['lowerCase']? './assets/images/verify-account.svg' : './assets/images/not-verify-account.svg'"
+              alt=""
+            />
+          </a>
+          <div [@fadeAnimation]>
+            <p
+              [class.text-valid]="!formControl()['new_password'].errors?.['lowerCase']"
+            >
+              Please enter at least one lower case letter
+            </p>
+          </div>
+        </div>
+        <div class="error-item">
+          <a class="check-icon">
+            <img
+              [src]="!formControl()['new_password'].errors?.['specialCharacter']? './assets/images/verify-account.svg' : './assets/images/not-verify-account.svg'"
+              alt=""
+            />
+          </a>
+          <div [@fadeAnimation]>
+            <p
+              [class.text-valid]="!formControl()['new_password'].errors?.['specialCharacter']"
+            >
+              Please enter at least one special character
+            </p>
+          </div>
+        </div>
+        <div class="error-item">
+          <a class="check-icon">
+            <img
+              [src]="!formControl()['new_password'].errors?.['number']? './assets/images/verify-account.svg' : './assets/images/not-verify-account.svg'"
+              alt=""
+            />
+          </a>
+          <div [@fadeAnimation]>
+            <p
+              [class.text-valid]="!formControl()['new_password'].errors?.['number']"
+            >
+              Please enter at least one number
+            </p>
+          </div>
+        </div>
+        <div class="error-item">
+          <a class="check-icon">
+            <img
+              [src]="!formControl()['new_password'].errors?.['length']? './assets/images/verify-account.svg' : './assets/images/not-verify-account.svg'"
+              alt=""
+            />
+          </a>
+          <div [@fadeAnimation]>
+            <p
+              [class.text-valid]="!formControl()['new_password'].errors?.['length']"
+            >
+              Password should be of 8 to 20 character
+            </p>
+          </div>
+        </div>
       </div>
-      } }
+      }}
     </div>
     <div class="auth-form-group">
       <div
@@ -118,10 +198,6 @@
       @if(formControl()['con_password'].hasError('required')) {
       <div [@fadeAnimation] class="auth-error-message">
         <p>Please enter your confirm password</p>
-      </div>
-      } @if(formControl()['con_password'].hasError('minlength')) {
-      <div [@fadeAnimation] class="auth-error-message">
-        <p>Password minimum 6 characters</p>
       </div>
       } @if(formControl()['con_password'].hasError('passwordMismatch')) {
       <div [@fadeAnimation] class="auth-error-message">

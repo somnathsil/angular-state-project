@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   inject,
@@ -16,6 +17,7 @@ import {
   angularTableModule,
   angularFormsModule,
   angularSidenavModule,
+  angularDatepickerModule,
 } from '@app/core/modules';
 import { CommonService } from '@app/core/services';
 import { WarningDialogComponent } from '@app/shared/components/dialogs/components';
@@ -37,6 +39,7 @@ import { Observable, startWith, Subscription } from 'rxjs';
   standalone: true,
   imports: [
     ListFilterComponent,
+    angularDatepickerModule,
     angularModule,
     angularTableModule,
     angularFormsModule,
@@ -45,6 +48,7 @@ import { Observable, startWith, Subscription } from 'rxjs';
     MatTooltipModule,
     PolicySidebarWrapperComponent,
   ],
+  providers: [DatePipe],
   templateUrl: './policy-list.component.html',
   styleUrl: './policy-list.component.scss',
 })
@@ -64,11 +68,21 @@ export class PolicyListComponent implements OnInit, OnDestroy {
   public pageNumber!: number;
   public pageSize = appSettings.rowsPerPage;
 
+  public titleValue = '';
+  public titleMatchMode = '';
+  public dateFilter: string = '';
+  public dateMatchMode: string = 'before';
+  public selectedStatusValue: string | number = '';
   private searchModel: string | number = '';
 
   public dialogRef!: MatDialogRef<any>;
   private subscriptions: Subscription[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  public calendarFilterDropDown: { value: string; label: string }[] =
+    appSettings.dateFilterDropDown;
+  public filterDropDown: { value: string; label: string }[] =
+    appSettings.stringFilterDropDown;
 
   public policyList: IPolicyList[] = [];
   public dataList = new MatTableDataSource<IPolicyList, MatPaginator>([]);
@@ -90,7 +104,7 @@ export class PolicyListComponent implements OnInit, OnDestroy {
     'action',
   ];
 
-  constructor() {}
+  constructor(private _datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this.loadPloicyList(1, '');
@@ -120,16 +134,21 @@ export class PolicyListComponent implements OnInit, OnDestroy {
       rows: this.pageSize,
       filters: {
         policy_name: {
-          matchMode: 'startsWith',
-          value: '',
+          matchMode: this.titleMatchMode ? this.titleMatchMode : 'startsWith',
+          value: this.titleValue ? this.titleValue : '',
         },
         updated_at: {
-          matchMode: 'before',
-          value: '',
+          matchMode: this.dateMatchMode ? this.dateMatchMode : 'before',
+          value: this.dateFilter
+            ? this._datePipe.transform(this.dateFilter, 'yyyy-MM-dd') ?? ''
+            : '',
         },
         status: {
           matchMode: 'eq',
-          value: '',
+          value:
+            this.selectedStatusValue !== undefined
+              ? this.selectedStatusValue
+              : '',
         },
       },
       globalFilter: searchModel ? searchModel : '',
@@ -211,6 +230,19 @@ export class PolicyListComponent implements OnInit, OnDestroy {
     this.loadPloicyList(this.pageNumber, this.searchModel);
   }
 
+  titleFilter(value: any) {
+    this.pageNumber = 1;
+    this.titleValue = value;
+    this.loadPloicyList(this.pageNumber, this.searchModel);
+  }
+
+  titleMatchModeChange() {
+    if (this.titleValue) {
+      this.pageNumber = 1;
+      this.loadPloicyList(this.pageNumber, this.searchModel);
+    }
+  }
+
   /* Open policy sidebar */
   onAddEditSidebarOpen(
     event: Event,
@@ -223,6 +255,53 @@ export class PolicyListComponent implements OnInit, OnDestroy {
     }
     this.pageType.set(sidebarType);
     this.isAddEditPolicySidebarOpen.set(true);
+  }
+
+  onSelectStatusFilters(value: string | number) {
+    this.selectedStatusValue = value;
+    this.pageNumber = 1;
+    this.loadPloicyList(this.pageNumber, this.searchModel);
+  }
+
+  onDateChange() {
+    this.pageNumber = 1;
+    this.loadPloicyList(this.pageNumber, this.searchModel);
+  }
+
+  onDateMatchModeChange() {
+    if (this.dateFilter) {
+      this.pageNumber = 1;
+      this.loadPloicyList(this.pageNumber, this.searchModel);
+    }
+  }
+
+  onClearFilter(filterType: 'title' | 'status' | 'date') {
+    this.pageNumber = 1;
+    switch (filterType) {
+      case 'title':
+        this.titleValue = '';
+        this.titleMatchMode = '';
+        break;
+      case 'status':
+        this.selectedStatusValue = '';
+        break;
+      case 'date':
+        this.dateFilter = '';
+        this.dateMatchMode = '';
+        break;
+    }
+    this.loadPloicyList(this.pageNumber, this.searchModel);
+  }
+
+  onSearch(searchValue: string | number) {
+    this.pageNumber = 1;
+    this.searchModel = searchValue;
+    this.loadPloicyList(this.pageNumber, this.searchModel);
+  }
+
+  onClearSearch(event: Event) {
+    this.searchModel = '';
+    this.selectedStatusValue = '';
   }
 
   onAddEditSidebarClose(event: Event) {

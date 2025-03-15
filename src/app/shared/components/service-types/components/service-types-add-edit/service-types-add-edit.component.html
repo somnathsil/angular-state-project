@@ -1,0 +1,100 @@
+<div class="custom-form-wrapper">
+  <form
+    [formGroup]="addEditServiceTypesForm"
+    (ngSubmit)="onSubmitAddEditServiceTypesForm($event)"
+  >
+    <div class="custom-form-block">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label class="label-with-info"
+              ><span>Service Types<sup>*</sup></span>
+            </label>
+            <div
+              class="formcontrol-wrapper"
+              [ngClass]="{
+                'invalid-control': hasFormControlError('service_name')
+              }"
+            >
+              <input
+                type="text"
+                autocomplete="off"
+                class="formcontrol"
+                placeholder="Enter Policy Title"
+                formControlName="service_name"
+              />
+            </div>
+            @if(hasFormControlError('service_name')) {
+            @if(formControl()['service_name'].hasError('required')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter service type</p>
+            </div>
+            } @if(formControl()['service_name'].hasError('pattern')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter valid service type</p>
+            </div>
+            }}
+          </div>
+          <div class="form-group">
+            <label class="label-with-info"
+              ><span>Service Month<sup>*</sup></span>
+            </label>
+            <div
+              class="formcontrol-wrapper"
+              [ngClass]="{
+                'invalid-control': hasFormControlError('service_month')
+              }"
+            >
+              <mat-form-field appearance="outline" class="custom-select">
+                <mat-select
+                  [placeholder]="'Select Month'"
+                  panelClass="custom-select-panel"
+                  formControlName="service_month"
+                >
+                  <mat-option value=""> Select Month </mat-option>
+                  @for (selectOption of monthTypes(); track $index) {
+                  <mat-option [value]="selectOption.label">{{
+                    selectOption.label
+                  }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            @if(hasFormControlError('service_month')) {
+            @if(formControl()['service_month'].hasError('required')){
+            <div [@fadeAnimation] class="error-message">
+              <p>Please enter service type</p>
+            </div>
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <div class="custom-toggle-slide mt-4">
+              @for(item of roleStatus(); track item.value){
+              <div class="custom-toggle-item">
+                <input
+                  type="radio"
+                  [id]="item.value"
+                  class="slide-toggle"
+                  [value]="item.value"
+                  formControlName="status"
+                />
+                <label [for]="item.value" class="slide-label">{{
+                  item.label
+                }}</label>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="custom-form-buttons-block">
+      <button type="button" class="btn btn-primary-outline">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>

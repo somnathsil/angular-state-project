@@ -123,7 +123,7 @@ export class AdminLeftbarComponent implements OnInit, OnDestroy {
           {
             id: '15',
             label: 'Service Types',
-            URl: '/settings/service',
+            URl: '/service-types',
             isActive: false,
             isSubMenuOpen: false,
             subMenus: [],

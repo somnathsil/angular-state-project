@@ -20,10 +20,10 @@ export const appSettings = {
     { value: 'notEquals', label: 'Not Equals' },
   ],
   dateFilterDropDown: [
-    { value: 'dateIs', label: 'Date is' },
-    { value: 'dateIsNot', label: 'Date is not' },
-    { value: 'dateIsBefore', label: 'Date is before' },
-    { value: 'dateIsAfter', label: 'Date is after' },
+    { value: 'between', label: 'Date is between' },
+    // { value: 'dateIsNot', label: 'Date is not' },
+    { value: 'before', label: 'Date is before' },
+    { value: 'after', label: 'Date is after' },
   ],
   numberFilterDropDown: [
     { value: 'eq', label: 'Equals' },

@@ -48,6 +48,13 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/policy/policy.routes').then((m) => m.policyRoutes),
       },
+      {
+        path: 'service-types',
+        loadChildren: () =>
+          import('./pages/service-types/service-types.routes').then(
+            (m) => m.serviceTypesRoutes
+          ),
+      },
     ],
   },
 ];
