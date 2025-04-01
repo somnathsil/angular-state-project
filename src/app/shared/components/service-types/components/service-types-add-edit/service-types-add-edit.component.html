@@ -13,7 +13,7 @@
             <div
               class="formcontrol-wrapper"
               [ngClass]="{
-                'invalid-control': hasFormControlError('service_name')
+                'invalid-control': hasFormControlError('service_type_name')
               }"
             >
               <input
@@ -21,15 +21,15 @@
                 autocomplete="off"
                 class="formcontrol"
                 placeholder="Enter Policy Title"
-                formControlName="service_name"
+                formControlName="service_type_name"
               />
             </div>
-            @if(hasFormControlError('service_name')) {
-            @if(formControl()['service_name'].hasError('required')){
+            @if(hasFormControlError('service_type_name')) {
+            @if(formControl()['service_type_name'].hasError('required')){
             <div [@fadeAnimation] class="error-message">
               <p>Please enter service type</p>
             </div>
-            } @if(formControl()['service_name'].hasError('pattern')){
+            } @if(formControl()['service_type_name'].hasError('pattern')){
             <div [@fadeAnimation] class="error-message">
               <p>Please enter valid service type</p>
             </div>
@@ -53,8 +53,8 @@
                 >
                   <mat-option value=""> Select Month </mat-option>
                   @for (selectOption of monthTypes(); track $index) {
-                  <mat-option [value]="selectOption.label">{{
-                    selectOption.label
+                  <mat-option [value]="selectOption.id">{{
+                    selectOption.month_name
                   }}</mat-option>
                   }
                 </mat-select>
@@ -93,7 +93,13 @@
       </div>
     </div>
     <div class="custom-form-buttons-block">
-      <button type="button" class="btn btn-primary-outline">Cancel</button>
+      <button
+        type="button"
+        class="btn btn-primary-outline"
+        (click)="onCancelAddServiceTypeForm($event)"
+      >
+        Cancel
+      </button>
       <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </form>

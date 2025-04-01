@@ -15,7 +15,11 @@
     <div class="sidebar-content-bot">
       <div class="sidebar-body-wrapper !bg-transparent">
         <div class="sidebar-tabs-area">
-          <app-service-types-add-edit />
+          <app-service-types-add-edit
+            [pageType]="pageType()"
+            [selectedServiceType]="selectedServiceTypes()"
+            (closeSidebar)="onCloseSidebar($event)"
+          />
         </div>
       </div>
     </div>

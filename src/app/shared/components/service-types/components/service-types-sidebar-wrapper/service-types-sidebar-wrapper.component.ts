@@ -11,7 +11,7 @@ import { angularModule } from '@app/core/modules';
 })
 export class ServiceTypesSidebarWrapperComponent {
   public pageType = input<string>();
-  public selectedServiceTypes = input<IPolicyList | null>();
+  public selectedServiceTypes = input<IServiceTypeList | null>();
   closeSidebar = output<Event>({ alias: 'closeSidebar' });
 
   onCloseSidebar(event: Event) {

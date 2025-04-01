@@ -7,22 +7,82 @@
         label: 'Add Service Types',
         icon: 'icon-add-plus-filter'
       }"
-      (open-sidebar)="onAddEditSidebarOpen($event)"
+      (open-sidebar)="onAddEditSidebarOpen($event, 'add', null)"
+      (onSearch)="onSearch($event)"
+      (onClickReset)="onClearSearch($event)"
     />
   </section>
   <div class="custom-page-wrapper">
-    <div class="role-list-table">
+    <div class="service-list-table">
       <table class="mat-table" mat-table [dataSource]="dataList">
         <ng-container matColumnDef="service_title">
           <th mat-header-cell *matHeaderCellDef>
             <div class="custom-datatable-header">
               <p>Service Types</p>
+              <div class="sortable-header-right">
+                <a
+                  class="icon-list-filter"
+                  [matMenuTriggerFor]="filterDropdown"
+                >
+                  <svg>
+                    <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
+                  </svg>
+                </a>
+                @if(serviceValue){
+                <a
+                  class="icon-list-filter-clear"
+                  (click)="onClearFilter('title')"
+                >
+                  <svg>
+                    <use
+                      xlink:href="./assets/scss/icons.svg#icon-filter-clear"
+                    ></use>
+                  </svg> </a
+                >}
+              </div>
+              <mat-menu #filterDropdown class="filter-inner-block">
+                <div
+                  class="global-filter-area"
+                  (click)="$event.stopPropagation()"
+                >
+                  <div class="filter-box-calendar">
+                    <input
+                      matInput
+                      ngModelDebounce
+                      class="formcontrol"
+                      [placeholder]="'Enter policy name'"
+                      [(ngModel)]="serviceValue"
+                      autocompleteOff="'off'"
+                      (ngModelDebounceChange)="serviceFilter($event)"
+                    />
+                  </div>
+                  <div class="filter-box-dropdown">
+                    <mat-form-field
+                      appearance="outline"
+                      class="custom-select-filter"
+                    >
+                      <mat-select
+                        placeholder="Select Filter"
+                        panelClass="custom-select-panel-filter"
+                        [(ngModel)]="serviceMatchMode"
+                        (ngModelChange)="serviceMatchModeChange()"
+                      >
+                        @for(item of filterDropDown; track $index){
+                        <mat-option [value]="item.value">{{
+                          item.label
+                        }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-menu>
             </div>
           </th>
           <td mat-cell *matCellDef="let data">
             <div class="custom-datatable-cont">
               <p>
-                <strong>Web Design</strong>
+                <strong>{{ data.service_type_name }}</strong>
               </p>
             </div>
           </td>
@@ -35,7 +95,31 @@
           </th>
           <td mat-cell *matCellDef="let data">
             <div class="custom-datatable-cont">
-              <p>March</p>
+              <p>{{ monthArr[data.service_month - 1] }}</p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="custom-datatable-header">
+              <p>Created At</p>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let data">
+            <div class="custom-datatable-cont">
+              <p>{{ data.createdAt | date : "MMMM d, y (h:mm a)" }}</p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="updated_at">
+          <th mat-header-cell *matHeaderCellDef>
+            <div class="custom-datatable-header">
+              <p>Last Updated At</p>
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let data">
+            <div class="custom-datatable-cont">
+              <p>{{ data.updatedAt | date : "MMMM d, y (h:mm a)" }}</p>
             </div>
           </td>
         </ng-container>
@@ -43,6 +127,51 @@
           <th mat-header-cell *matHeaderCellDef>
             <div class="custom-datatable-header">
               <p>Status</p>
+              <div class="sortable-header-right">
+                <a
+                  class="icon-list-filter"
+                  [matMenuTriggerFor]="filterDropdown"
+                >
+                  <svg>
+                    <use xlink:href="./assets/scss/icons.svg#icon-filter"></use>
+                  </svg>
+                </a>
+                @if(selectedStatusValue !== ''){
+                <a
+                  class="icon-list-filter-clear"
+                  (click)="onClearFilter('status')"
+                >
+                  <svg>
+                    <use
+                      xlink:href="./assets/scss/icons.svg#icon-filter-clear"
+                    ></use>
+                  </svg>
+                </a>
+                }
+              </div>
+              <mat-menu #filterDropdown class="filter-inner-block">
+                <div class="global-filter-area">
+                  <div class="filter-box-status">
+                    <ul>
+                      @for(item of statusFilterArr; track item;let i = $index){
+                      <li>
+                        <a
+                          class="status-badge"
+                          [ngClass]="{
+                            'status-badge-red': item.value === 0,
+                            'status-badge-green': item.value === 1,
+                            'status-badge-red-focus': item.value === 0 && item.value === selectedStatusValue,
+                            'status-badge-green-focus': item.value === 1 && item.value === selectedStatusValue,
+                          }"
+                          (click)="onSelectStatusFilters(item.value)"
+                          >{{ item.label }}</a
+                        >
+                      </li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+              </mat-menu>
             </div>
           </th>
           <td mat-cell *matCellDef="let data">
@@ -71,6 +200,7 @@
                   class="edit"
                   matTooltip="Edit"
                   matTooltipClass="custom-list-tooltip"
+                  (click)="onAddEditSidebarOpen($event, 'edit', data)"
                 >
                   <svg>
                     <use xlink:href="./assets/scss/icons.svg#icon-edit"></use>
@@ -80,6 +210,7 @@
                   class="delete"
                   matTooltip="Delete"
                   matTooltipClass="custom-list-tooltip"
+                  (click)="onDeleteServiceTypeDialog($event, data.id, data)"
                 >
                   <svg>
                     <use xlink:href="./assets/scss/icons.svg#icon-delete"></use>
@@ -123,6 +254,17 @@
           "
         ></mat-footer-row>
       </table>
+      <div class="paginator-block">
+        <mat-paginator
+          appPagination
+          showFirstLastButtons
+          [length]="(serviceTypeLIstCount$ | async) || 0"
+          [pageSize]="pageSize"
+          [hidePageSize]="true"
+          (page)="onPageChange($event)"
+        >
+        </mat-paginator>
+      </div>
     </div>
   </div>
 </main>

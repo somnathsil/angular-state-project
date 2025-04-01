@@ -117,7 +117,9 @@ export class PolicyAddEditComponent implements OnInit {
       const formValue = {
         ...this.addEditPolicyForm.value,
       };
-      const policyListListParam = {
+
+      /*  This is for Merge Map Update List */
+      const policyListParam = {
         first: 1,
         rows: 5,
         filters: {
@@ -153,9 +155,7 @@ export class PolicyAddEditComponent implements OnInit {
             .dispatch(new AddPolicy(formValue))
             .pipe(
               mergeMap((x) => {
-                return this._store.dispatch(
-                  new AllPolicyList(policyListListParam)
-                );
+                return this._store.dispatch(new AllPolicyList(policyListParam));
               })
             )
             .subscribe({
@@ -186,9 +186,7 @@ export class PolicyAddEditComponent implements OnInit {
             .dispatch(new EditPolicy(formValue))
             .pipe(
               mergeMap((x) => {
-                return this._store.dispatch(
-                  new AllPolicyList(policyListListParam)
-                );
+                return this._store.dispatch(new AllPolicyList(policyListParam));
               })
             )
             .subscribe({

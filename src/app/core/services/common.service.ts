@@ -77,4 +77,13 @@ export class CommonService {
   public setManageClientSidebarSubject(data: boolean) {
     this._manageClientSidebarSubject.next(data);
   }
+
+  public _monthDataSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
+    null
+  );
+  public _monthDataSource$ = this._monthDataSubject.asObservable();
+
+  public setMonthData(monthData: any) {
+    this._monthDataSubject.next(monthData);
+  }
 }

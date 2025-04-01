@@ -1,0 +1,6 @@
+.service-list-table ::ng-deep {
+  .mat-table thead tr th,
+  .mat-table tbody tr td {
+    @apply w-[16%];
+  }
+}
